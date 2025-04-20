@@ -1,0 +1,16 @@
+<div class="card h-100">
+    <img [src]="product.imageUrl" class="card-img-top" [alt]="product.name">
+    <div class="card-body">
+      <h5 class="card-title">{{ product.name }}</h5>
+      <p class="card-text">{{ product.description }}</p>
+      <p class="card-text"><strong>Price: ${{ product.price }}</strong></p>
+      <div>
+        <button class="btn btn-secondary" style="margin-right: 5px;" (click)="increaseQuantity()">+</button>
+        <button class="btn btn-primary " style="margin-right: 5px;" (click)="addToCart()">Add to Cart</button>
+        <button class="btn btn-secondary" (click)="decreaseQuantity()">-</button>
+        <p *ngIf="quantity > 0" class="text-success">Item(s) in cart! {{ quantity }}</p>
+        <p *ngIf="quantity === 0" class="text-danger">No items in cart.</p>
+        
+      </div>
+    </div>
+  </div>

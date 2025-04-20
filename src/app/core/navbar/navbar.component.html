@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+      <!-- Left section: Logo + Home -->
+       <ul class="navbar-nav">
+         <a class="navbar-brand" routerLink="/home">E-Commerce</a>
+       </ul>
+   
+      
+
+      <!-- Right section: Auth + Cart -->
+      <ul class="navbar-nav align-items-center">
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
+          <a class="nav-link" routerLink="/cart" routerLinkActive="active">Cart</a>
+        </li>
+        <li class="nav-item" *ngIf="!authService.isLoggedIn()">
+          <a class="nav-link" routerLink="/auth/login" routerLinkActive="active">Login</a>
+        </li>
+        <li class="nav-item" *ngIf="!authService.isLoggedIn()">
+          <a class="nav-link" routerLink="/auth/register" routerLinkActive="active">Register</a>
+        </li>
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
+          <a class="nav-link" (click)="logout()" style="cursor: pointer;">Logout</a>
+        </li>
+      </ul>
+    </div>
+  <!-- </div> -->
+</nav>
