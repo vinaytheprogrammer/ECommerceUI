@@ -10,5 +10,5 @@ export const clearState = createAction('[Auth] Clear State');
 
 export const setUser = createAction(
   '[Auth] Set User',
-  props<{ user: User }>()
+  props<{ user: User | null }>()
 );

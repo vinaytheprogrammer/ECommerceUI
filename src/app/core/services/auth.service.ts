@@ -5,8 +5,10 @@ import { Store } from '@ngrx/store';
 import { setToken, setUser } from '../store/auth/auth.actions';
 import {
   selectIsAuthenticated,
-  selectUser, selectIsAdmin
+  selectUser,
+  selectIsAdmin,
 } from '../store/auth/auth.selectors';
+import { take } from 'rxjs/internal/operators/take';
 
 @Injectable({
   providedIn: 'root',
@@ -118,10 +120,12 @@ export class AuthService {
         refreshToken,
       });
       console.log('Logout response:', response.data);
+      console.log('Logout response status of isAdmin:', this.isAdmin());
       if (response.data && response.data.message === 'Logout successful') {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         this.isAuthenticated = false;
+        this.store.dispatch(setUser({ user: null })); // Reset user state
       } else {
         console.error('Invalid logout response:', response.data);
       }
@@ -142,13 +146,16 @@ export class AuthService {
   navigateToLogin(): void {
     this.router.navigate(['/auth/login']);
   }
-
+  
   isAdmin(): boolean {
-    let isAdmin = false;
-    this.store.select(selectIsAdmin).subscribe((isAdminValue) => {
-      console.log('Is Admin: coming from ngrx selector', isAdminValue);
-      isAdmin = isAdminValue;
-    });
+    let isAdmin: boolean = false;
+    this.store
+      .select(selectIsAdmin)
+      .pipe(take(1)) // Take the first emitted value and complete the observable
+      .subscribe((isAdminValue) => {
+        console.log('Is Admin: coming from ngrx selector', isAdminValue);
+        isAdmin = Boolean(isAdminValue);
+      });
     return isAdmin;
   }
 }
