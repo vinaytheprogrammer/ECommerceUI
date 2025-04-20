@@ -34,7 +34,6 @@ export class HomeComponent implements OnInit {
   ];
   visit(product: any) {
     console.log('Product visited to cart:', product);
-    window.location.href = `/home/product/${product.id}`;
   }
   removeFromCart(product: any) {
     console.log('Product removed from cart:', product);

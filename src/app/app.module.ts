@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './core/navbar/navbar.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './core/store/app.state';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { reducers } from './core/store/app.state';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot(reducers)
+    StoreModule.forRoot(reducers),
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

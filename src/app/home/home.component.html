@@ -5,7 +5,7 @@
             <img [src]="product.imageUrl" alt="{{ product.name }}" style="width: 150px; height: 150px; object-fit: cover;" />
             <h2>{{ product.name }}</h2>
             <p>{{ product.description }}</p>
-            <button (click)="visit(product)">Visit</button>
+            <button (click)="visit(product)"  [routerLink]="['/home/product', product.id]" >Visit</button>
         </div>
     </div>
 </div>
