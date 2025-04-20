@@ -1,0 +1,62 @@
+<div class="mb-4">
+    <h2>Manage Products</h2>
+    <button class="btn btn-primary" (click)="openAddProductModal()">Add New Product</button>
+  </div>
+  
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>${{ product.price }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="editProduct(product)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteProduct(product.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Add/Edit Product Modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEditing ? 'Edit' : 'Add' }} Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="handleProductSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Product Name</label>
+              <input type="text" class="form-control" [(ngModel)]="currentProduct.name" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Price</label>
+              <input type="number" class="form-control" [(ngModel)]="currentProduct.price" name="price" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" [(ngModel)]="currentProduct.description" name="description"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Image URL</label>
+              <input type="text" class="form-control" [(ngModel)]="currentProduct.imageUrl" name="imageUrl">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

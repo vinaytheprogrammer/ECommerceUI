@@ -1,17 +1,45 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import axios from 'axios';
+import { Store } from '@ngrx/store';
+import { setToken, setUser } from '../store/auth/auth.actions';
+import {
+  selectIsAuthenticated,
+  selectUser, selectIsAdmin
+} from '../store/auth/auth.selectors';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private isAuthenticated = false;
   private apiEndpoint = 'http://localhost:3011';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private store: Store) {}
 
-  async signup(name: string, email: string, password: string, role: string): Promise<boolean> {
+  decodeTokenPayload(accessToken: string): any {
+    try {
+      const payloadBase64 = accessToken.split('.')[1];
+      const payloadDecoded = atob(payloadBase64);
+      return JSON.parse(payloadDecoded);
+    } catch (error) {
+      console.error('Error decoding token payload:', error);
+      return null;
+    }
+  }
+
+  private putInsideStorage(accessToken: string): void {
+    this.store.dispatch(setToken({ accessToken }));
+    const user = this.decodeTokenPayload(accessToken);
+    this.store.dispatch(setUser({ user }));
+  }
+
+  async signup(
+    name: string,
+    email: string,
+    password: string,
+    role: string
+  ): Promise<boolean> {
     try {
       const response = await axios.post(`${this.apiEndpoint}/signup`, {
         name,
@@ -20,10 +48,15 @@ export class AuthService {
         password,
       });
 
-      if (response.data && response.data.accessToken && response.data.refreshToken) {
+      if (
+        response.data &&
+        response.data.accessToken &&
+        response.data.refreshToken
+      ) {
         localStorage.setItem('accessToken', response.data.accessToken);
         localStorage.setItem('refreshToken', response.data.refreshToken);
         this.isAuthenticated = true;
+        this.putInsideStorage(response.data.accessToken);
       } else {
         console.error('Invalid signup response:', response.data);
         this.isAuthenticated = false;
@@ -35,27 +68,46 @@ export class AuthService {
     return this.isAuthenticated;
   }
 
-  
   async login(name: string, password: string): Promise<boolean> {
     // In a real app, you'd call an API here
-  try {
-    const response = await axios.post(`${this.apiEndpoint}/login`, {
-      name,
-      password
-    });
+    try {
+      const response = await axios.post(`${this.apiEndpoint}/login`, {
+        name,
+        password,
+      });
 
-    if (response.data && response.data.accessToken && response.data.refreshToken) {
-      localStorage.setItem('accessToken', response.data.accessToken);
-      localStorage.setItem('refreshToken', response.data.refreshToken);
-      this.isAuthenticated = true;
-    } else {
-      console.error('Invalid login response:', response.data);
+      if (
+        response.data &&
+        response.data.accessToken &&
+        response.data.refreshToken
+      ) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+        this.isAuthenticated = true;
+        console.log(
+          'payload: ',
+          this.decodeTokenPayload(response.data.accessToken)
+        );
+
+        this.putInsideStorage(response.data.accessToken);
+        // Example: Using selectors
+        this.store
+          .select(selectIsAuthenticated)
+          .subscribe((isAuthenticated) => {
+            console.log('Is Authenticated:  yeah', isAuthenticated);
+          });
+
+        this.store.select(selectUser).subscribe((user) => {
+          console.log('User: coming from ngrx selector', user);
+        });
+      } else {
+        console.error('Invalid login response:', response.data);
+        this.isAuthenticated = false;
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
       this.isAuthenticated = false;
     }
-  } catch (error) {
-    console.error('Error during login:', error);
-    this.isAuthenticated = false;
-  }
     return this.isAuthenticated;
   }
 
@@ -63,7 +115,7 @@ export class AuthService {
     try {
       const refreshToken = localStorage.getItem('refreshToken');
       const response = await axios.post(`${this.apiEndpoint}/logout`, {
-        refreshToken
+        refreshToken,
       });
       console.log('Logout response:', response.data);
       if (response.data && response.data.message === 'Logout successful') {
@@ -89,5 +141,14 @@ export class AuthService {
 
   navigateToLogin(): void {
     this.router.navigate(['/auth/login']);
+  }
+
+  isAdmin(): boolean {
+    let isAdmin = false;
+    this.store.select(selectIsAdmin).subscribe((isAdminValue) => {
+      console.log('Is Admin: coming from ngrx selector', isAdminValue);
+      isAdmin = isAdminValue;
+    });
+    return isAdmin;
   }
 }
