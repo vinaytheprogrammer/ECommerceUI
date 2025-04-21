@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from '../../home/models/user.model'; // Adjusted the import path
+import { User } from '../../models/user.model'; // Adjusted the import path
 
 @Injectable({
   providedIn: 'root'

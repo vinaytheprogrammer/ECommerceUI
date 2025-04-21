@@ -1,10 +1,8 @@
-// product.service.ts
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Product } from '../../home/models/product.model';
-// import { CartService } from './cart.service'; // 👈 Don't inject directly
+import { Product } from '../../models/product.model';
 
 @Injectable({
   providedIn: 'root'

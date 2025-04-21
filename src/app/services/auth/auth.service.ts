@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import { setToken, setUser } from '../store/auth/auth.actions';
+import { setToken, setUser } from '../../core/store/auth/auth.actions';
 import {
   selectIsAuthenticated,
   selectUser,
   selectIsAdmin,
-} from '../store/auth/auth.selectors';
+} from '../../core/store/auth/auth.selectors';
 import { take } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
 
