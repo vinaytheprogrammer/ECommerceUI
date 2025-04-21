@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import axios from 'axios';
+import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { setToken, setUser } from '../store/auth/auth.actions';
 import {
@@ -8,7 +8,8 @@ import {
   selectUser,
   selectIsAdmin,
 } from '../store/auth/auth.selectors';
-import { take } from 'rxjs/internal/operators/take';
+import { take } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,11 @@ export class AuthService {
   private isAuthenticated = false;
   private apiEndpoint = 'http://localhost:3011';
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(
+    private router: Router,
+    private store: Store,
+    private http: HttpClient
+  ) {}
 
   decodeTokenPayload(accessToken: string): any {
     try {
@@ -43,24 +48,22 @@ export class AuthService {
     role: string
   ): Promise<boolean> {
     try {
-      const response = await axios.post(`${this.apiEndpoint}/signup`, {
-        name,
-        email,
-        role,
-        password,
-      });
+      const response: any = await firstValueFrom(
+        this.http.post(`${this.apiEndpoint}/signup`, {
+          name,
+          email,
+          role,
+          password,
+        })
+      );
 
-      if (
-        response.data &&
-        response.data.accessToken &&
-        response.data.refreshToken
-      ) {
-        localStorage.setItem('accessToken', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
+      if (response?.accessToken && response?.refreshToken) {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
         this.isAuthenticated = true;
-        this.putInsideStorage(response.data.accessToken);
+        this.putInsideStorage(response.accessToken);
       } else {
-        console.error('Invalid signup response:', response.data);
+        console.error('Invalid signup response:', response);
         this.isAuthenticated = false;
       }
     } catch (error) {
@@ -71,39 +74,30 @@ export class AuthService {
   }
 
   async login(name: string, password: string): Promise<boolean> {
-    // In a real app, you'd call an API here
     try {
-      const response = await axios.post(`${this.apiEndpoint}/login`, {
-        name,
-        password,
-      });
+      const response: any = await firstValueFrom(
+        this.http.post(`${this.apiEndpoint}/login`, {
+          name,
+          password,
+        })
+      );
 
-      if (
-        response.data &&
-        response.data.accessToken &&
-        response.data.refreshToken
-      ) {
-        localStorage.setItem('accessToken', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
+      if (response?.accessToken && response?.refreshToken) {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
         this.isAuthenticated = true;
-        console.log(
-          'payload: ',
-          this.decodeTokenPayload(response.data.accessToken)
-        );
+        console.log('payload:', this.decodeTokenPayload(response.accessToken));
+        this.putInsideStorage(response.accessToken);
 
-        this.putInsideStorage(response.data.accessToken);
-        // Example: Using selectors
-        this.store
-          .select(selectIsAuthenticated)
-          .subscribe((isAuthenticated) => {
-            console.log('Is Authenticated:  yeah', isAuthenticated);
-          });
+        this.store.select(selectIsAuthenticated).subscribe((auth) => {
+          console.log('Is Authenticated:', auth);
+        });
 
         this.store.select(selectUser).subscribe((user) => {
-          console.log('User: coming from ngrx selector', user);
+          console.log('User from selector:', user);
         });
       } else {
-        console.error('Invalid login response:', response.data);
+        console.error('Invalid login response:', response);
         this.isAuthenticated = false;
       }
     } catch (error) {
@@ -116,46 +110,66 @@ export class AuthService {
   async logout(): Promise<void> {
     try {
       const refreshToken = localStorage.getItem('refreshToken');
-      const response = await axios.post(`${this.apiEndpoint}/logout`, {
-        refreshToken,
-      });
-      console.log('Logout response:', response.data);
+      const response: any = await firstValueFrom(
+        this.http.post(`${this.apiEndpoint}/logout`, { refreshToken })
+      );
+      console.log('Logout response:', response);
       console.log('Logout response status of isAdmin:', this.isAdmin());
-      if (response.data && response.data.message === 'Logout successful') {
+
+      if (response?.message === 'Logout successful') {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         this.isAuthenticated = false;
-        this.store.dispatch(setUser({ user: null })); // Reset user state
+        this.store.dispatch(setUser({ user: null }));
       } else {
-        console.error('Invalid logout response:', response.data);
+        console.error('Invalid logout response:', response);
       }
     } catch (error) {
       console.error('Error during logout:', error);
     }
 
-    // Redirect to login page
     this.router.navigate(['/home']);
   }
 
   isLoggedIn(): boolean {
     const accessToken = localStorage.getItem('accessToken');
-    this.isAuthenticated = !!accessToken; // Update isAuthenticated based on token presence
+    this.isAuthenticated = !!accessToken;
     return this.isAuthenticated;
   }
 
   navigateToLogin(): void {
     this.router.navigate(['/auth/login']);
   }
-  
+
   isAdmin(): boolean {
-    let isAdmin: boolean = false;
+    let isAdmin = false;
     this.store
       .select(selectIsAdmin)
-      .pipe(take(1)) // Take the first emitted value and complete the observable
-      .subscribe((isAdminValue) => {
-        console.log('Is Admin: coming from ngrx selector', isAdminValue);
-        isAdmin = Boolean(isAdminValue);
+      .pipe(take(1))
+      .subscribe((val) => {
+        console.log('Is Admin:', val);
+        isAdmin = !!val;
       });
     return isAdmin;
+  }
+
+  async refreshAccessToken(refreshToken: string): Promise<string | null> {
+    try {
+      const response: any = await firstValueFrom(
+        this.http.post(`${this.apiEndpoint}/refresh-token`, { refreshToken })
+      );
+
+      if (response?.accessToken) {
+        localStorage.setItem('accessToken', response.accessToken);
+        this.putInsideStorage(response.accessToken);
+        return response.accessToken;
+      } else {
+        console.error('Invalid refresh token response:', response);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error refreshing access token:', error);
+      return null;
+    }
   }
 }

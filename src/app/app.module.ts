@@ -7,6 +7,8 @@ import { NavbarComponent } from './core/navbar/navbar.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './core/store/app.state';
 import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,11 @@ import { HttpClientModule } from '@angular/common/http';
     StoreModule.forRoot(reducers),
     HttpClientModule
   ],
-  providers: [],
+  providers: [ {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
