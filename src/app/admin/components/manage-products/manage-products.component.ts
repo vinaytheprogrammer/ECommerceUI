@@ -9,8 +9,13 @@ import { ProductService } from '../../../services/product/product.service';
 })
 export class ManageProductsComponent implements OnInit {
   products: Product[] = [];
+  filteredProducts: Product[] = [];
   currentProduct: Product = this.getEmptyProduct();
   isEditing = false;
+  imageUrl = '';
+  searchText = '';
+  showProductModal= false;
+
 
   constructor(private productService: ProductService) {}
 
@@ -21,22 +26,25 @@ export class ManageProductsComponent implements OnInit {
   loadProducts(): void {
     this.productService.getProducts().subscribe(products => {
       this.products = products;
+      this.applySearch();
     });
   }
 
   openAddProductModal(): void {
     this.currentProduct = this.getEmptyProduct();
+    this.imageUrl = '';
     this.isEditing = false;
-    this.showModal();
+    this.showProductModal = true;
   }
 
   editProduct(product: Product): void {
     this.currentProduct = { ...product };
+    this.imageUrl = product.images[0] || '';
     this.isEditing = true;
-    this.showModal();
+    this.showProductModal = true;
   }
 
-  deleteProduct(id: number): void {
+  deleteProduct(id: string): void {
     if (confirm('Are you sure you want to delete this product?')) {
       this.productService.deleteProduct(id).subscribe(() => {
         this.loadProducts();
@@ -45,37 +53,50 @@ export class ManageProductsComponent implements OnInit {
   }
 
   handleProductSubmit(): void {
+    this.currentProduct.images = [this.imageUrl];
+
     if (this.isEditing) {
-      this.productService.updateProduct(this.currentProduct).subscribe(() => {
+      this.productService.updateProduct(String(this.currentProduct.id), this.currentProduct).subscribe(() => {
         this.loadProducts();
         this.hideModal();
       });
     } else {
-      this.productService.addProduct(this.currentProduct).subscribe(() => {
+      console.log('Creating product:', this.currentProduct);
+      this.productService.createProduct(this.currentProduct).subscribe(() => {
         this.loadProducts();
         this.hideModal();
       });
     }
   }
 
+  applySearch(): void {
+    const lower = this.searchText.toLowerCase();
+    this.filteredProducts = this.products.filter(product =>
+      product.name.toLowerCase().includes(lower)
+    );
+  }
+
   private getEmptyProduct(): Product {
     return {
-      id: 0,
+      id: this.generateUUID(),
       name: '',
       price: 0,
       description: '',
-      imageUrl: 'https://via.placeholder.com/150'
+      images: [],
+      discount: 0,
+      categoryId: '',
+      brandId: '',
+      stock: 0
     };
   }
 
-  private showModal(): void {
-    const modal = new (window as any).bootstrap.Modal(document.getElementById('productModal'));
-    modal.show();
+  private generateUUID(): string {
+    return Math.floor(1000 + Math.random() * 9000).toString();
   }
 
+
+
   private hideModal(): void {
-    const modal = new (window as any).bootstrap.Modal(document.getElementById('productModal'));
-    modal.hide();
+    this.showProductModal = false;
   }
-  
 }

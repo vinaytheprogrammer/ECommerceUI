@@ -1,13 +1,19 @@
 <div class="product-container">
-    <h1>Our Products</h1>
+    <h1>Our Categories (Total: {{ categoryCount }})</h1>
+  
     <div class="product-grid">
-        <div class="product-card" *ngFor="let product of products">
-            <img [src]="product.imageUrl" alt="{{ product.name }}" style="width: 150px; height: 150px; object-fit: cover;" />
-            <h2>{{ product.name }}</h2>
-            <p>{{ product.description }}</p>
-            <button (click)="visit(product)"  [routerLink]="['/home/product', product.id]" >Visit</button>
-        </div>
+      <div class="product-card" *ngFor="let category of categories">
+        <img
+          [src]="category.imageUrl"
+          alt="{{ category.name }}"
+          style="width: 150px; height: 150px; object-fit: cover;"
+        />
+        <h2>{{ category.name }}</h2>
+        <p>{{ category.description }}</p>
+        <button (click)="visit(category)" [routerLink]="['/home/product', category.id]">Visit</button>       
+      </div>
     </div>
-</div>
-
-<router-outlet></router-outlet>
+  </div>
+  
+  <router-outlet></router-outlet>
+  

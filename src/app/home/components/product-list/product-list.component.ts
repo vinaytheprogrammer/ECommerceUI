@@ -1,121 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../../../models/product.model.js';
 import { ActivatedRoute } from '@angular/router';
-
+import { ProductService } from '../../../services/product/product.service'; // Adjust path as needed
+import { Product } from '../../../models/product.model'; // Adjust path as needed
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
-  id!: string; // Added definite assignment assertion to avoid initialization error
-  products: Product[] = []; // Initialize products to an empty array
-  constructor(private route: ActivatedRoute) {}
+  id!: string;
+  products: Product[] = [];
 
-  // Call the function in ngOnInit
+  constructor(
+    private route: ActivatedRoute,
+    private productService: ProductService
+  ) {}
+
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.id = params['id'];
       console.log('Extracted ID from route:', this.id);
-      this.updateProductsById();
+      this.fetchProductsByCategoryId(this.id);
     });
   }
 
-  updateProductsById(): void {
-    switch (this.id) {
-      case '1':
-        this.products = this.cameras;
-        break;
-      case '2':
-        this.products = this.watches;
-        break;
-      case '3':
-        this.products = this.shoes;
-        break;
-      default:
+  fetchProductsByCategoryId(categoryId: string): void {
+    this.productService.getProducts().subscribe({
+      next: (data: Product[]) => {
+        this.products = data.filter(product => product.categoryId === categoryId);
+        console.log(`Filtered products for category ${categoryId}:`, this.products);
+      },
+      error: (err) => {
+        console.error('Failed to fetch products:', err);
         this.products = [];
-        console.warn('Invalid ID, no products to display.');
-    }
+      }
+    });
   }
-
-  cameras: Product[] = [
-    {
-      id: 1,
-      name: 'Camera',
-      description: 'High-quality DSLR camera with advanced features.',
-      price: 500,
-      imageUrl:
-        'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?cs=srgb&dl=pexels-madebymath-90946.jpg&fm=jpg',
-    },
-    {
-      id: 2,
-      name: 'Camera Lens',
-      description: 'Wide-angle lens for capturing stunning landscapes.',
-      price: 300,
-      imageUrl:
-        'https://images.pexels.com/photos/274973/pexels-photo-274973.jpeg?cs=srgb&dl=pexels-pixabay-274973.jpg&fm=jpg',
-    },
-    {
-      id: 3,
-      name: 'Camera Tripod',
-      description: 'Lightweight and durable tripod for stable shots.',
-      price: 150,
-      imageUrl:
-        'https://i.natgeofe.com/n/cae95353-dd17-41f9-85f3-9699745e7ce9/MM10326_20241009_0001.jpg',
-    },
-  ];
-
-  watches: Product[] = [
-    {
-      id: 4,
-      name: 'Smart Watch',
-      description: 'Feature-packed smartwatch with fitness tracking.',
-      price: 200,
-      imageUrl:
-        'https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-pixabay-190819.jpg&fm=jpg',
-    },
-    {
-      id: 5,
-      name: 'Analog Watch',
-      description: 'Classic analog watch with leather strap.',
-      price: 100,
-      imageUrl:
-        'https://images.pexels.com/photos/277319/pexels-photo-277319.jpeg?cs=srgb&dl=pexels-pixabay-277319.jpg&fm=jpg',
-    },
-    {
-      id: 6,
-      name: 'Digital Watch',
-      description: 'Durable digital watch with multiple features.',
-      price: 80,
-      imageUrl:
-        'https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?cs=srgb&dl=pexels-pixabay-125779.jpg&fm=jpg',
-    },
-  ];
-
-  shoes: Product[] = [
-    {
-      id: 7,
-      name: 'Running Shoes',
-      description: 'Comfortable running shoes for daily workouts.',
-      price: 120,
-      imageUrl:
-        'https://assets.ajio.com/medias/sys_master/root/20241104/ew9I/6728b3d7260f9c41e8bcdfc0/-1117Wx1400H-466481202-grey-MODEL3.jpg',
-    },
-    {
-      id: 8,
-      name: 'Formal Shoes',
-      description: 'Elegant formal shoes for office and events.',
-      price: 150,
-      imageUrl:
-        'https://alonzoshoes.in/cdn/shop/files/DSC_0720.jpg?v=1703764708&width=1946',
-    },
-    {
-      id: 9,
-      name: 'Sneakers',
-      description: 'Stylish sneakers for casual wear.',
-      price: 90,
-      imageUrl:
-        'https://m.media-amazon.com/images/I/614aiM56siL._AC_UY1000_.jpg',
-    },
-  ];
 }

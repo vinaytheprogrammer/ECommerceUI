@@ -6,37 +6,33 @@ import { AuthService } from '../../../services/auth/auth.service';
 @Component({
   selector: 'app-product-card',
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.scss']
+  styleUrls: ['./product-card.component.scss'],
 })
 export class ProductCardComponent {
   @Input() product!: Product;
-  quantity: number = 0; // Default quantity
+  quantity: number = 1;
+
   constructor(
     private cartService: CartService,
     private authService: AuthService
   ) {}
 
-  addToCart(): void {
-    if (this.authService.isLoggedIn()) {
-      if(this.quantity <= 0) {
-        alert('Please select a valid quantity.');
-        return;
-      }
-      this.cartService.addToCart(this.product, this.quantity);
-      alert('Product successfully added to the cart!');
-    } else {
-      // Redirect to login
-      // In a real app, you might want to show a modal or something
-      this.authService.navigateToLogin();
-    }
+  addToCart() {
+    const userId = this.authService.getCurrentUserId(); 
+
+    this.cartService.addToCart(this.product.id, this.quantity, userId).subscribe({
+      next: () => alert(`${this.quantity}x ${this.product.name} added to cart.`),
+      error: (err) => console.error('Error adding to cart', err)
+    });
   }
 
-  decreaseQuantity(): void {
-    if (this.quantity > 0) {
+  incrementQuantity() {
+    this.quantity++;
+  }
+
+  decrementQuantity() {
+    if (this.quantity > 1) {
       this.quantity--;
     }
-  }
-  increaseQuantity(): void {
-    this.quantity++;
   }
 }

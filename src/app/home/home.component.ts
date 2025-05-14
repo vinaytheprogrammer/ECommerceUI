@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CategoryService } from '../services/category/category.service';
+import { Category } from '../models/category.model';
 
 @Component({
   selector: 'app-home',
@@ -6,39 +8,55 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  categories: Category[] = [];
+  categoryCount: number = 0;
 
-  constructor() { }
+  constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
+    this.loadCategories();
+    this.getCategoryCount();
   }
 
-  products = [
-    {
-      id: 1,
-      name: 'Camera',
-      description: 'Description for Camera',
-      imageUrl: 'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?cs=srgb&dl=pexels-madebymath-90946.jpg&fm=jpg'
-    },
-    {
-      id: 2,
-      name: 'Watches',
-      description: 'Description for Watches',
-      imageUrl: 'https://titanworld.com/cdn/shop/files/2648WM04_1_acea2af1-a8c4-4d06-83a3-b43381097683.jpg?v=1730812321&width=2000'
-    },
-    {
-      id: 3,
-      name: 'Shoes',
-      description: 'Description for Shoes',
-      imageUrl: 'https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg'
-    }
-  ];
-  visit(product: any) {
-    console.log('Product visited to cart:', product);
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe((data) => {
+      this.categories = data;
+      console.log('Categories loaded:', this.categories);
+    });
   }
-  removeFromCart(product: any) {
-    console.log('Product removed from cart:', product);
+
+  getCategoryCount(): void {
+    this.categoryService.getCategoryCount().subscribe((count) => {
+      this.categoryCount = count;
+    });
   }
-  viewProductDetails(product: any) {
-    console.log('Product details:', product);
+
+  addCategory(): void {
+    const newCategory: Category = {
+      id: '4',
+      name: 'New Category',
+      imageUrl: 'https://example.com/image.jpg',
+      description: 'A new category description',
+    };
+    this.categoryService.createCategory(newCategory).subscribe(() => {
+      this.loadCategories();
+    });
+  }
+
+  updateCategory(): void {
+    const updatedCategory: Category = {
+      id: '3',
+      name: 'Updated 4K Ultra HD Monitor',
+      imageUrl: 'https://example.com/updated-image.jpg',
+      description: 'Updated description for 4K Monitor',
+    };
+    this.categoryService.updateCategory('3', updatedCategory).subscribe(() => {
+      this.loadCategories();
+    });
+  }
+
+
+  visit(category: Category) {
+    console.log('Category visited:', category);
   }
 }

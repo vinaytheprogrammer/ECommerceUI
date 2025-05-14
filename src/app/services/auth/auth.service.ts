@@ -27,7 +27,7 @@ export class AuthService {
   decodeTokenPayload(accessToken: string): any {
     try {
       const payloadBase64 = accessToken.split('.')[1];
-      const payloadDecoded = atob(payloadBase64);
+      const payloadDecoded = atob(payloadBase64); // Decode base64 string
       return JSON.parse(payloadDecoded);
     } catch (error) {
       console.error('Error decoding token payload:', error);
@@ -171,5 +171,18 @@ export class AuthService {
       console.error('Error refreshing access token:', error);
       return null;
     }
+  }
+
+  getCurrentUserId(): string {
+    let userId = '';
+    this.store
+      .select(selectUser)
+      .pipe(take(1))
+      .subscribe((user) => {
+      if (user && user.id) {
+        userId = user.id;
+      }
+      });
+    return userId;
   }
 }

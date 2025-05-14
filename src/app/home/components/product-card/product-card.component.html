@@ -1,16 +1,28 @@
-<div class="card h-100">
-    <img [src]="product.imageUrl" class="card-img-top" [alt]="product.name">
-    <div class="card-body">
-      <h5 class="card-title">{{ product.name }}</h5>
-      <p class="card-text">{{ product.description }}</p>
-      <p class="card-text"><strong>Price: ${{ product.price }}</strong></p>
-      <div>
-        <button class="btn btn-secondary" style="margin-right: 5px;" (click)="increaseQuantity()">+</button>
-        <button class="btn btn-primary " style="margin-right: 5px;" (click)="addToCart()">Add to Cart</button>
-        <button class="btn btn-secondary" (click)="decreaseQuantity()">-</button>
-        <p *ngIf="quantity > 0" class="text-success">Item(s) in cart! {{ quantity }}</p>
-        <p *ngIf="quantity === 0" class="text-danger">No items in cart.</p>
-        
+<div class="card h-100 shadow-sm">
+  <img
+    [src]="product.images[0]"
+    class="card-img-top"
+    [alt]="'Image of ' + product.name"
+    style="height: 550px; object-fit: cover;"
+  />
+  <div class="card-body d-flex flex-column">
+    <h5 class="card-title">{{ product.name }}</h5>
+    <p class="card-text">{{ product.description }}</p>
+    <p class="card-text"><strong>Price: ${{ product.price }}</strong></p>
+
+    <div class="mt-auto">
+      <div class="btn-group mb-2" role="group" aria-label="Quantity selector">
+        <button class="btn btn-secondary" (click)="decrementQuantity()" [disabled]="quantity <= 0">-</button>
+        <button class="btn btn-light" disabled>{{ quantity }}</button>
+        <button class="btn btn-secondary" (click)="incrementQuantity()">+</button>
       </div>
+
+      <button class="btn btn-primary btn-block w-100" (click)="addToCart()">
+        Add to Cart
+      </button>
+
+      <p *ngIf="quantity > 0" class="text-success mt-2">Selected: {{ quantity }}</p>
+      <p *ngIf="quantity === 0" class="text-muted mt-2">No quantity selected</p>
     </div>
   </div>
+</div>
