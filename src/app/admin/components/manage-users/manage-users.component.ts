@@ -1,63 +1,97 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../../../models/user.model';
+// import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/user/user.service';
-
+export interface User {
+  user_id?: number;
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+}
 @Component({
   selector: 'app-manage-users',
   templateUrl: './manage-users.component.html',
   styleUrls: ['./manage-users.component.scss']
 })
-export class ManageUsersComponent implements OnInit {
+export class ManageUsersComponent {
   users: User[] = [];
-  currentUser: User = this.getEmptyUser();
+  showAddUserForm = false;
+  editingUser = false;
+  currentUser: User = {
+    name: '',
+    email: '',
+    password: '',
+    role: 'user'
+  };
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.loadUsers();
+   
+    // Get all users
+    this.userService.getAllUsers().subscribe(users => {
+      this.users = users;
+      console.log('All users:', users);
+    });
+
+   
   }
 
-  loadUsers(): void {
-    this.userService.getUsers().subscribe(users => {
-      this.users = users;
+  createUser() {
+    this.userService.createUser(this.currentUser).subscribe({
+      next: (response) => {
+        this.users.push(response);
+        this.resetForm();
+      },
+      error: (err) => console.error('Error creating user:', err)
     });
   }
 
-  editUser(user: User): void {
+  editUser(user: User) {
+    this.editingUser = true;
     this.currentUser = { ...user };
-    this.showModal();
+    this.showAddUserForm = true;
   }
 
-  deleteUser(username: string): void {
+  updateUser() {
+    if (!this.currentUser.user_id) return;
+    
+    this.userService.updateUserById(this.currentUser.user_id, this.currentUser).subscribe({
+      next: () => {
+        const index = this.users.findIndex(u => u.user_id === this.currentUser.user_id);
+        if (index !== -1) {
+          this.users[index] = { ...this.currentUser };
+        }
+        this.resetForm();
+      },
+      error: (err) => console.error('Error updating user:', err)
+    });
+  }
+
+  deleteUser(id: number) {
     if (confirm('Are you sure you want to delete this user?')) {
-      this.userService.deleteUser(username).subscribe(() => {
-        this.loadUsers();
+      this.userService.deleteUserById(id).subscribe({
+        next: () => {
+          this.users = this.users.filter(user => user.user_id !== id);
+        },
+        error: (err) => console.error('Error deleting user:', err)
       });
     }
   }
 
-  handleUserSubmit(): void {
-    this.userService.updateUser(this.currentUser).subscribe(() => {
-      this.loadUsers();
-      this.hideModal();
-    });
+  cancelForm() {
+    this.resetForm();
   }
 
-  private getEmptyUser(): User {
-    return {
-      username: '',
+  private resetForm() {
+    this.currentUser = {
+      name: '',
       email: '',
-      role: 'customer'
+      password: '',
+      role: 'user'
     };
+    this.editingUser = false;
+    this.showAddUserForm = false;
   }
 
-  private showModal(): void {
-    const modal = new (window as any).bootstrap.Modal(document.getElementById('userModal'));
-    modal.show();
-  }
-
-  private hideModal(): void {
-    const modal = new (window as any).bootstrap.Modal(document.getElementById('userModal'));
-    modal.hide();
-  }
 }
