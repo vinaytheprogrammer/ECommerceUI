@@ -4,6 +4,7 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { ManageProductsComponent } from './components/manage-products/manage-products.component';
 import { ManageUsersComponent } from './components/manage-users/manage-users.component';
 import { AdminGuard } from '../core/guards/admin.guard';
+import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
 
 const routes: Routes = [
   { 
@@ -13,6 +14,7 @@ const routes: Routes = [
     children: [
       { path: 'products', component: ManageProductsComponent },
       { path: 'users', component: ManageUsersComponent },
+      { path: 'profile', component: AdminProfileComponent},
       { path: '', redirectTo: 'products', pathMatch: 'full' }
     ]
   }

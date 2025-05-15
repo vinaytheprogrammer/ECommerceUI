@@ -82,11 +82,13 @@ export class CartService {
         },
         error: (err) => {
           // If cart doesn't exist, create a new one
-          const newCart: Cart = {
-            id: cartId,
-            userId,
-            productsId: Array(quantity).fill(productId)
-          };
+            const newCart: Cart = {
+            id: String(cartId),
+            userId: String(userId),
+            productsId: Array(quantity).fill(String(productId))
+            };
+
+          console.log('Creating new cart:', newCart);
           this.create(newCart).subscribe({
             next: (created) => observer.next(created),
             error: error => observer.error(error),

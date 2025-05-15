@@ -1,13 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../services/cart/cart.service';
 import { AuthService } from '../services/auth/auth.service'; // Adjust the path as needed
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  imageUrl: string;
-}
+import { CartItem } from '../models/cart.model'; // Adjust the path as needed
 
 @Component({
   selector: 'app-cart',

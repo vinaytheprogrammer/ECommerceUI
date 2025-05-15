@@ -17,12 +17,10 @@ export class RegisterComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {}
 
   onSubmit(): void {
-    // In a real app, you'd call an API to register the user
-    // For now, we'll just log them in directly
     this.authService.signup(this.username, this.email, this.password, this.role ).then((success) => {
       if (success) {
         this.router.navigate(['/home']);

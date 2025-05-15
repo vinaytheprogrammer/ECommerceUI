@@ -7,13 +7,15 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { ManageProductsComponent } from './components/manage-products/manage-products.component';
 import { ManageUsersComponent } from './components/manage-users/manage-users.component';
 import { FormsModule } from '@angular/forms';
+import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
 
 @NgModule({
   declarations: [
     AdminComponent,
     AdminDashboardComponent,
     ManageProductsComponent,
-    ManageUsersComponent
+    ManageUsersComponent,
+    AdminProfileComponent
   ],
   imports: [
     CommonModule,

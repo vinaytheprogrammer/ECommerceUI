@@ -1,13 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-// import { User } from '../../../models/user.model';
+import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/user/user.service';
-export interface User {
-  user_id?: number;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-}
+
 @Component({
   selector: 'app-manage-users',
   templateUrl: './manage-users.component.html',
@@ -20,7 +14,6 @@ export class ManageUsersComponent {
   currentUser: User = {
     name: '',
     email: '',
-    password: '',
     role: 'user'
   };
 

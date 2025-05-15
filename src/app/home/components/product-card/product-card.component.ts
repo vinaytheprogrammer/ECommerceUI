@@ -20,6 +20,9 @@ export class ProductCardComponent {
   addToCart() {
     const userId = this.authService.getCurrentUserId(); 
 
+    console.log('User ID:', userId);
+    console.log('Product ID:', this.product.id);
+    console.log('Quantity:', this.quantity);
     this.cartService.addToCart(this.product.id, this.quantity, userId).subscribe({
       next: () => alert(`${this.quantity}x ${this.product.name} added to cart.`),
       error: (err) => console.error('Error adding to cart', err)

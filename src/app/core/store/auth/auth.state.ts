@@ -1,8 +1,8 @@
-import { User } from 'src/app/models/user.model';
+import { AuthUser } from 'src/app/models/user.model';
 
 export interface AuthState {
   accessToken: string | null;
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
 }
 

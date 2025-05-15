@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { User } from '../../../models/user.model';
+import { AuthUser } from '../../../models/user.model';
 
 export const setToken = createAction(
   '[Auth] Set Token',
@@ -10,5 +10,5 @@ export const clearState = createAction('[Auth] Clear State');
 
 export const setUser = createAction(
   '[Auth] Set User',
-  props<{ user: User | null }>()
+  props<{ user: AuthUser | null }>()
 );

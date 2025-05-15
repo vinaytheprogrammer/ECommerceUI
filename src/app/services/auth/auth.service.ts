@@ -21,7 +21,7 @@ export class AuthService {
   constructor(
     private router: Router,
     private store: Store,
-    private http: HttpClient
+    private http: HttpClient,
   ) {}
 
   decodeTokenPayload(accessToken: string): any {
