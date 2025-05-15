@@ -5,13 +5,15 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
+import { CarouselComponent } from '../core/caraousel/caraousel.component';
 
 
 @NgModule({
   declarations: [
     HomeComponent,
     ProductListComponent,
-    ProductCardComponent
+    ProductCardComponent,
+    CarouselComponent
   ],
   imports: [
     CommonModule,

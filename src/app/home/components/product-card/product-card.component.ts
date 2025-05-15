@@ -35,4 +35,6 @@ export class ProductCardComponent {
       this.quantity--;
     }
   }
+
+  buyNow() {}
 }

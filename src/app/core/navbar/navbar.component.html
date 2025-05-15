@@ -1,30 +1,27 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-      <!-- Left section: Logo + Home -->
-       <ul class="navbar-nav">
-         <a class="navbar-brand" routerLink="/home">E-Commerce</a>
-       </ul>
-   
-      
+<nav class="bg-gray-900 shadow-md p-3 flex items-center justify-between flex-wrap">
+  <div class="flex items-center justify-between w-full lg:w-auto">
+    <!-- Left section: Logo -->
+    <a class="text-white text-lg font-bold" routerLink="/home">E-Commerce</a>
+  </div>
 
-      <!-- Right section: Auth + Cart -->
-      <ul class="navbar-nav align-items-center">
-        <li class="nav-item" *ngIf="authService.isLoggedIn()">
-          <a class="nav-link" routerLink="/cart" routerLinkActive="active">Cart</a>
-        </li>
-        <li class="nav-item" *ngIf="authService.isAdmin()">
-          <a class="nav-link" routerLink="/admin" routerLinkActive="active">Admin</a>
-        </li>
-        <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-          <a class="nav-link" routerLink="/auth/login" routerLinkActive="active">Login</a>
-        </li>
-        <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-          <a class="nav-link" routerLink="/auth/register" routerLinkActive="active">Register</a>
-        </li>
-        <li class="nav-item" *ngIf="authService.isLoggedIn()">
-          <a class="nav-link" (click)="logout()" style="cursor: pointer;">Logout</a>
-        </li>
-      </ul>
-    </div>
-  <!-- </div> -->
+  <div class="w-full lg:flex lg:items-center lg:justify-between lg:w-auto">
+    <!-- Right section: Auth + Cart -->
+    <ul class="flex flex-col lg:flex-row items-center lg:space-x-4 w-full lg:w-auto">
+      <li class="my-2 lg:my-0" *ngIf="authService.isLoggedIn()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/cart" routerLinkActive="font-bold border-b-2 border-yellow-400">Cart</a>
+      </li>
+      <li class="my-2 lg:my-0" *ngIf="authService.isAdmin()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/admin" routerLinkActive="font-bold border-b-2 border-yellow-400">Admin</a>
+      </li>
+      <li class="my-2 lg:my-0" *ngIf="!authService.isLoggedIn()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/auth/login" routerLinkActive="font-bold border-b-2 border-yellow-400">Login</a>
+      </li>
+      <li class="my-2 lg:my-0" *ngIf="!authService.isLoggedIn()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/auth/register" routerLinkActive="font-bold border-b-2 border-yellow-400">Register</a>
+      </li>
+      <li class="my-2 lg:my-0" *ngIf="authService.isLoggedIn()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition cursor-pointer" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </div>
 </nav>
