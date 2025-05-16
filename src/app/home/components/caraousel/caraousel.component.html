@@ -1,0 +1,57 @@
+<div class="w-full h-[351px] mt-1 mb-2">
+    <div class="relative bg-white  shadow overflow-hidden p-4">
+      <!-- Slide Content -->
+      <div class="flex flex-col md:flex-row h-full">
+        <!-- Image Section -->
+        <div class="w-full md:w-1/2 h-[351px] overflow-hidden">
+          <img
+            [src]="products[currentIndex].imageUrl"
+            alt="Product Image"
+            class="w-full h-[351px] object-cover"
+          />
+        </div>
+  
+        <!-- Product Info Section -->
+        <div class="w-full md:w-1/2 p-6 flex flex-col justify-center">
+          <h2 class="text-2xl font-bold mb-2">
+            {{ products[currentIndex].title }}
+          </h2>
+          <p class="text-gray-700 text-sm mb-4">
+            {{ products[currentIndex].description }}
+          </p>
+          <div class="flex items-center space-x-4 mb-4">
+            <span class="text-xl font-semibold text-green-600">
+              Starts at just ${{ products[currentIndex].price }}
+            </span>
+            <span class="bg-red-600 text-white px-2 py-1 text-sm rounded">
+              -{{ products[currentIndex].discount }}% OFF
+            </span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Navigation Buttons -->
+      <button
+        (click)="prevSlide()"
+        class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+  
+      <button
+        (click)="nextSlide()"
+        class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  
