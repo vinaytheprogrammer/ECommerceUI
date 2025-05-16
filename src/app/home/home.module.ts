@@ -5,7 +5,9 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
-import { CarouselComponent } from '../core/caraousel/caraousel.component';
+import { CarouselComponent } from './components/caraousel/caraousel.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,11 +15,13 @@ import { CarouselComponent } from '../core/caraousel/caraousel.component';
     HomeComponent,
     ProductListComponent,
     ProductCardComponent,
-    CarouselComponent
+    CarouselComponent,
+    UserProfileComponent
   ],
   imports: [
     CommonModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    FormsModule
   ]
 })
 export class HomeModule { }

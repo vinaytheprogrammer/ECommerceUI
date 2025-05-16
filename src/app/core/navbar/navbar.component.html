@@ -13,6 +13,9 @@
       <li class="my-2 lg:my-0" *ngIf="authService.isAdmin()">
         <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/admin" routerLinkActive="font-bold border-b-2 border-yellow-400">Admin</a>
       </li>
+      <li class="my-2 lg:my-0" *ngIf="!authService.isAdmin() && authService.isLoggedIn()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="home/user-profile" routerLinkActive="font-bold border-b-2 border-yellow-400">User</a>
+      </li>
       <li class="my-2 lg:my-0" *ngIf="!authService.isLoggedIn()">
         <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/auth/login" routerLinkActive="font-bold border-b-2 border-yellow-400">Login</a>
       </li>
