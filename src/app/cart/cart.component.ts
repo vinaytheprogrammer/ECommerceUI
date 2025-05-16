@@ -11,6 +11,7 @@ import { CartItem } from '../models/cart.model'; // Adjust the path as needed
 export class CartComponent implements OnInit {
   cartId = ''; // You should load this dynamically based on the user
   cartItems: CartItem[] = [];
+  totalPrice = 0;
 
   constructor(private cartService: CartService,
       private authService: AuthService) {}
@@ -31,11 +32,12 @@ export class CartComponent implements OnInit {
   }
 
   getTotalItems(): number {
-    return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);  
   }
 
   getTotalPrice(): number {
-    return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+     this.totalPrice = this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+     return this.totalPrice;
   }
 
   removeItem(productId: string): void {
@@ -52,12 +54,13 @@ export class CartComponent implements OnInit {
   }
 
   checkout(): void {
-    alert('Proceeding to checkout!');
-    // implement real checkout logic here
+    alert(`Proceeding to checkout! Total price: ${this.totalPrice}`);
   }
 
   clearCart(): void {
     this.cartItems = [];
-    
+    this.cartService.update(this.cartId, { productsId: [] }).subscribe(() => {
+      console.log('Cart cleared');
+    });
   }
 }
