@@ -1,8 +1,38 @@
 <div class="bg-white sm:px-8 px-4 py-6">
     <div class="max-w-screen-xl max-md:max-w-xl mx-auto">
-        <!-- Progress Steps (unchanged) -->
         <div class="flex items-start mb-16">
-            <!-- Your existing progress steps HTML -->
+            <div class="w-full">
+                <div class="flex items-center w-full">
+                    <div class="w-8 h-8 shrink-0 mx-[-1px] bg-blue-600 p-1.5 flex items-center justify-center rounded-full">
+                        <span class="text-sm text-white font-semibold">1</span>
+                    </div>
+                    <div class="w-full h-[3px] mx-4 rounded-lg bg-blue-600"></div>
+                </div>
+                <div class="mt-2 mr-4">
+                    <h6 class="text-sm font-semibold text-slate-900">Cart</h6>
+                </div>
+            </div>
+            <div class="w-full">
+                <div class="flex items-center w-full">
+                    <div class="w-8 h-8 shrink-0 mx-[-1px] bg-blue-600 p-1.5 flex items-center justify-center rounded-full">
+                        <span class="text-sm text-white font-semibold">2</span>
+                    </div>
+                    <div class="w-full h-[3px] mx-4 rounded-lg bg-slate-300"></div>
+                </div>
+                <div class="mt-2 mr-4">
+                    <h6 class="text-sm font-semibold text-slate-900">Checkout</h6>
+                </div>
+            </div>
+            <div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 shrink-0 mx-[-1px] bg-slate-300 p-1.5 flex items-center justify-center rounded-full">
+                        <span class="text-sm text-white font-semibold">3</span>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <h6 class="text-sm font-semibold text-slate-400">Order</h6>
+                </div>
+            </div>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8 lg:gap-x-12">
@@ -164,8 +194,8 @@
                 <ul class="text-slate-500 font-medium space-y-4">
                     <li class="flex flex-wrap gap-4 text-sm">Subtotal <span class="ml-auto font-semibold text-slate-900">Rs.{{totalPrice | number:'1.2-2'}}</span></li>
                     <li class="flex flex-wrap gap-4 text-sm">Discount <span class="ml-auto font-semibold text-slate-900">- Rs.{{discountAmount | number:'1.2-2'}}</span></li>
-                    <li class="flex flex-wrap gap-4 text-sm">Shipping <span class="ml-auto font-semibold text-slate-900">Rs.6.00</span></li>
-                    <li class="flex flex-wrap gap-4 text-sm">Tax <span class="ml-auto font-semibold text-slate-900">Rs.4.00</span></li>
+                    <li class="flex flex-wrap gap-4 text-sm">Shipping <span class="ml-auto font-semibold text-slate-900">+ Rs.6.00</span></li>
+                    <li class="flex flex-wrap gap-4 text-sm">Tax <span class="ml-auto font-semibold text-slate-900">+ Rs.4.00</span></li>
                     <hr class="border-slate-300" />
                     <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">Total <span class="ml-auto">Rs.{{grandTotal | number:'1.2-2'}}</span></li>
                 </ul>
