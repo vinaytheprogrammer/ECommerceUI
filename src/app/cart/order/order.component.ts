@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Order } from '../../models/order.model';
 import { OrderService } from '../../services/order/order.service';
-import { CartService } from 'src/app/services/cart/cart.service';
+import { CartManagerService } from 'src/app/services/cart/cart.manager.service';
 import { CartItem } from 'src/app/models/cart.model';
 import { forkJoin } from 'rxjs';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthManagerService } from 'src/app/services/auth/auth.manager.service';
 
 @Component({
   selector: 'app-order',
@@ -21,8 +21,8 @@ export class OrderComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private cartService: CartService,
-    private authService: AuthService
+    private cartManagerService: CartManagerService,
+    private authManagerService: AuthManagerService
   ) {}
 
   ngOnInit(): void {
@@ -31,7 +31,7 @@ export class OrderComponent implements OnInit {
 
     forkJoin({
       orders: this.orderService.getAll(),
-      products: this.cartService.getAllProducts(),
+      products: this.cartManagerService.getAllProducts(),
     }).subscribe({
       next: ({ orders, products }) => {
         this.orders = orders;
@@ -46,7 +46,7 @@ export class OrderComponent implements OnInit {
         this.isLoading = false;
 
         this.currentUserOrder = this.orders.find(
-          (order) => order.user_id == this.authService.getCurrentUserId()
+          (order) => order.user_id == this.authManagerService.getCurrentUserId()
         ) || ({} as Order);
         
 

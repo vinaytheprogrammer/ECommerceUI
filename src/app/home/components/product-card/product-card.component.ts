@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Product } from '../../../models/product.model.js';
-import { CartService } from '../../../services/cart/cart.service';
-import { AuthService } from '../../../services/auth/auth.service';
+import { CartManagerService } from '../../../services/cart/cart.manager.service';
+import { AuthManagerService } from '../../../services/auth/auth.manager.service';
 
 @Component({
   selector: 'app-product-card',
@@ -13,17 +13,17 @@ export class ProductCardComponent {
   quantity: number = 1;
 
   constructor(
-    private cartService: CartService,
-    private authService: AuthService
+    private cartManagerService: CartManagerService,
+    private authManagerService: AuthManagerService
   ) {}
 
   addToCart() {
-    const userId = this.authService.getCurrentUserId(); 
+    const userId = this.authManagerService.getCurrentUserId(); 
 
     console.log('User ID:', userId);
     console.log('Product ID:', this.product.id);
     console.log('Quantity:', this.quantity);
-    this.cartService.addToCart(this.product.id, this.quantity, userId).subscribe({
+    this.cartManagerService.addToCart(this.product.id, this.quantity, userId).subscribe({
       next: () => alert(`${this.quantity}x ${this.product.name} added to cart.`),
       error: (err) => console.error('Error adding to cart', err)
     });

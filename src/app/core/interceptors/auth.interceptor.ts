@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject, from } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthManagerService } from '../../services/auth/auth.manager.service';
 
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
-    private authService: AuthService
+    private authManagerService: AuthManagerService
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -53,10 +53,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
       const refreshToken = token ? localStorage.getItem('refreshToken') : null;
       if (!refreshToken) {
-        this.authService.logout();
+        this.authManagerService.logout();
         return throwError('No refresh token available');
       }
-      return from(this.authService.refreshAccessToken(refreshToken)).pipe(
+      return from(this.authManagerService.refreshAccessToken(refreshToken)).pipe(
         switchMap((token: any) => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.accessToken);
@@ -65,7 +65,7 @@ export class AuthInterceptor implements HttpInterceptor {
         }),
         catchError(err => {
           this.isRefreshing = false;
-          this.authService.logout();
+          this.authManagerService.logout();
           return throwError(err);
         })
       );

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CartService } from '../services/cart/cart.service';
-import { AuthService } from '../services/auth/auth.service'; // Adjust the path as needed
+import { CartManagerService } from '../services/cart/cart.manager.service';
+import { AuthManagerService } from '../services/auth/auth.manager.service'; // Adjust the path as needed
 import { CartItem } from '../models/cart.model'; // Adjust the path as needed
 import { Output, EventEmitter } from '@angular/core';
 
@@ -14,13 +14,13 @@ export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
   totalPrice = 0;
 
-  constructor(private cartService: CartService,
-      private authService: AuthService) {}
+  constructor(private cartManagerService: CartManagerService,
+      private authManagerService: AuthManagerService) {}
 
   ngOnInit(): void {
     
-   this.cartId = `cart-${this.authService.getCurrentUserId()}`; // Adjust this to get the actual cart ID
-    this.cartService.getAllProducts().subscribe(products => {
+   this.cartId = `cart-${this.authManagerService.getCurrentUserId()}`; // Adjust this to get the actual cart ID
+    this.cartManagerService.getAllProducts().subscribe(products => {
       this.cartItems = products.map(product => ({
         id: product.id,
         name: product.name,
@@ -49,7 +49,7 @@ export class CartComponent implements OnInit {
       this.cartItems.splice(itemIndex, 1);
       }
       const updatedProductIds = this.cartItems.map(item => item.id);
-      this.cartService.update(this.cartId, { productsId: updatedProductIds }).subscribe();
+      this.cartManagerService.update(this.cartId, { productsId: updatedProductIds }).subscribe();
     }
   }
 
@@ -59,7 +59,7 @@ export class CartComponent implements OnInit {
 
   clearCart(): void {
     this.cartItems = [];
-    this.cartService.update(this.cartId, { productsId: [] }).subscribe(() => {
+    this.cartManagerService.update(this.cartId, { productsId: [] }).subscribe(() => {
       console.log('Cart cleared');
     });
   }

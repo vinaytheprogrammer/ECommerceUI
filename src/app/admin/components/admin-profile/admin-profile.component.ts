@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthUser, User } from 'src/app/models/user.model';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthManagerService } from 'src/app/services/auth/auth.manager.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 
@@ -20,11 +20,11 @@ export class AdminProfileComponent implements OnInit {
 
   isEditing = false;
   constructor(private userService : UserService,
-      private authService : AuthService,
+      private authManagerService : AuthManagerService,
   ) { }
 
   ngOnInit(): void {
-    const userId = this.authService.getCurrentUserId();
+    const userId = this.authManagerService.getCurrentUserId();
     this.userService.getUserById(Number(userId)).subscribe(
       (user: User) => {
         this.currentUser = {

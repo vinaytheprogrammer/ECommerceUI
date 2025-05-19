@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category/category.service';
 import { Category } from '../models/category.model';
-import { AuthService } from '../services/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -16,18 +15,14 @@ export class HomeComponent implements OnInit {
   
   constructor(
     private categoryService: CategoryService,
-    private authService: AuthService,
     private route: ActivatedRoute
 
   ) {
     this.route.queryParams.subscribe((params) => {
-      this.authService.getAccessToken(params['code']).subscribe((res) => {
-        this.token = res.accessToken;
-        window.sessionStorage.removeItem('accessToken');
-        window.sessionStorage.removeItem('refreshToken');
-        window.sessionStorage.setItem('accessToken', res.accessToken);
-        window.sessionStorage.setItem('refreshToken', res.refreshToken);
-      });
+      const code = params['code'];
+      if (code) {
+        window.sessionStorage.setItem('authCode', code);
+      }
     });
   }
 

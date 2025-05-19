@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { setToken, setUser, clearState } from '../../core/store/auth/auth.actions';
 import { selectUser, selectIsAdmin } from '../../core/store/auth/auth.selectors';
 import { firstValueFrom, take } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',

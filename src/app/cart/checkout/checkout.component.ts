@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Order } from 'src/app/models/order.model';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthManagerService } from 'src/app/services/auth/auth.manager.service';
 import { OrderService } from 'src/app/services/order/order.service';
-import { CartService } from 'src/app/services/cart/cart.service';
+import { CartManagerService } from 'src/app/services/cart/cart.manager.service';
 
 @Component({
   selector: 'app-checkout',
@@ -24,9 +24,9 @@ export class CheckoutComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private authService: AuthService,
+    private authManagerService: AuthManagerService,
     private orderService: OrderService,
-    private cartService: CartService
+    private cartManagerService: CartManagerService
   ) {
     this.checkoutForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -43,8 +43,8 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     
     this.calculateGrandTotal();
-    this.user_id = this.authService.getCurrentUserId();
-    this.cartService.getAllProducts().subscribe(products => {
+    this.user_id = this.authManagerService.getCurrentUserId();
+    this.cartManagerService.getAllProducts().subscribe(products => {
       this.cartItems = products.map(product => ({
         id: product.id,
         name: product.name,
