@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Order } from 'src/app/models/order.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { OrderService } from 'src/app/services/order/order.service';
 
 @Component({
   selector: 'app-checkout',
@@ -15,10 +18,12 @@ export class CheckoutComponent implements OnInit {
   promoCode: string = '';
   discountApplied: boolean = false;
   discountAmount: number = 0;
-
+  user_id: string = '';
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private orderService: OrderService
   ) {
     this.checkoutForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -36,6 +41,7 @@ export class CheckoutComponent implements OnInit {
     const queryParams = this.route.snapshot.queryParams;
     this.totalPrice = Number(queryParams['totalPrice']) || 0;
     this.calculateGrandTotal();
+    this.user_id = this.authService.getCurrentUserId();
   }
 
   calculateGrandTotal() {
@@ -71,21 +77,45 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    const orderData = {
-      ...this.checkoutForm.value,
-      paymentMethod: this.paymentMethod,
-      totalPrice: this.totalPrice,
-      discount: this.discountAmount,
-      grandTotal: this.grandTotal
+    const orderData : Order= {
+  
+      id: Math.floor(100 + Math.random() * 900).toString(), // Generate a random 3-digit ID
+      user_id: String(this.user_id), // Dummy user ID, replace with actual logic
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      subtotal: this.totalPrice,
+      taxAmount: 4.00,
+      shippingAmount: 6.00,
+      discountAmount: this.discountAmount,
+      grandTotal: this.grandTotal,
+      user_email: this.checkoutForm.value.email,
+      shippingMethod: 'Standard',
+      shippingStatus: 'Pending',
+      trackingNumber: `PAY-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+      shippedAt: Date.now().toString() + '3',
+      deliverAt: Date.now().toString(), 
+      name: `${this.checkoutForm.value.firstName} ${this.checkoutForm.value.lastName}`,
+      phone: this.checkoutForm.value.phone,
+      shippingAddress: `${this.checkoutForm.value.address}, ${this.checkoutForm.value.city}, ${this.checkoutForm.value.state}, ${this.checkoutForm.value.zipCode}`
     };
 
+    this.orderService.create(orderData).subscribe({
+      next: (response) => {
+        console.log('Order created successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error creating order:', error);
+        alert('Failed to place the order. Please try again.');
+      }
+    });
+
     console.log('Order submitted:', orderData);
-    // Here you would typically send the order data to your backend
+   
     alert('Order placed successfully!');
   }
 
   continueShopping() {
-    // Navigate back to products page or wherever appropriate
     console.log('Continue shopping clicked');
   }
 }

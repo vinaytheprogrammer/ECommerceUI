@@ -40,7 +40,8 @@
         Add to Cart
       </button>
 
-      <button
+      <button  [routerLink]="['/cart/checkout']"
+        [queryParams]="{ totalPrice: this.product.price}"
       class="btn bg-green-600 text-white w-full py-3 rounded-md mt-4 hover:bg-green-800 transition-transform duration-300 ease-in-out hover:translate-y-[-2px] shadow-md"
       (click)="buyNow()"
     >

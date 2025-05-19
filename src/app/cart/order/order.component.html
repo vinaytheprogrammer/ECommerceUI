@@ -1,0 +1,161 @@
+
+<div
+  class="max-w-5xl mx-auto px-4 sm:px-6 py-8 bg-white rounded-lg shadow-md mt-8 mb-12"
+>
+        <!-- Success Header -->
+        <div class="flex items-start mb-16">
+            <div class="w-full"   [routerLink]="['/cart']">
+                <div class="flex items-center w-full">
+                    <div class="w-8 h-8 shrink-0 mx-[-1px] bg-blue-600 p-1.5 flex items-center justify-center rounded-full">
+                        <span class="text-sm text-white font-semibold">1</span>
+                    </div>
+                    <div class="w-full h-[3px] mx-4 rounded-lg bg-blue-600"></div>
+                </div>
+                <div class="mt-2 mr-4">
+                    <h6 class="text-sm font-semibold text-slate-900">Cart</h6>
+                </div>
+            </div>
+            <div class="w-full"   [routerLink]="['/cart/checkout']">
+                <div class="flex items-center w-full">
+                    <div class="w-8 h-8 shrink-0 mx-[-1px] bg-blue-600 p-1.5 flex items-center justify-center rounded-full">
+                        <span class="text-sm text-white font-semibold">2</span>
+                    </div>
+                    <div class="w-full h-[3px] mx-4 rounded-lg bg-blue-600"></div>
+                </div>
+                <div class="mt-2 mr-4">
+                    <h6 class="text-sm font-semibold text-slate-900">Checkout</h6>
+                </div>
+            </div>
+            <div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 shrink-0 mx-[-1px] bg-blue-600 p-1.5 flex items-center justify-center rounded-full">
+                        <span class="text-sm text-white font-semibold">3</span>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <h6 class="text-sm font-semibold text-slate-900">Order</h6>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="text-center mb-12">
+            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                <i class="fas fa-check text-green-600 text-xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
+            <p class="text-lg text-gray-600">Your order has been placed and will be processed shortly.</p>
+            <p class="text-gray-500 mt-2">Order #12345</p>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="bg-white shadow rounded-lg overflow-hidden mb-8">
+            <div class="px-6 py-5 border-b border-gray-200">
+                <h2 class="text-lg font-medium text-gray-900">Order Summary</h2>
+            </div>
+            <div class="px-6 py-5">
+                <!-- Order Items -->
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-20 h-20 rounded-md overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80" 
+                                 alt="Product image" class="w-full h-full object-center object-cover">
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <div class="flex items-center justify-between text-base font-medium text-gray-900">
+                                <h3>Premium Headphones</h3>
+                                <p class="ml-4">$299.00</p>
+                            </div>
+                            <p class="mt-1 text-sm text-gray-500">Wireless, Noise Cancelling</p>
+                            <p class="mt-2 text-sm text-gray-500">Qty: 1</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-20 h-20 rounded-md overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80" 
+                                 alt="Product image" class="w-full h-full object-center object-cover">
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <div class="flex items-center justify-between text-base font-medium text-gray-900">
+                                <h3>Smartphone Case</h3>
+                                <p class="ml-4">$39.00</p>
+                            </div>
+                            <p class="mt-1 text-sm text-gray-500">Shockproof, Matte Black</p>
+                            <p class="mt-2 text-sm text-gray-500">Qty: 2</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Totals -->
+                <div class="border-t border-gray-200 mt-6 pt-6">
+                    <div class="flex justify-between text-base font-medium text-gray-900 mb-2">
+                        <p>Subtotal</p>
+                        <p>$377.00</p>
+                    </div>
+                    <div class="flex justify-between text-base font-medium text-gray-900 mb-2">
+                        <p>Shipping</p>
+                        <p>$12.00</p>
+                    </div>
+                    <div class="flex justify-between text-base font-medium text-gray-900 mb-2">
+                        <p>Tax</p>
+                        <p>$30.16</p>
+                    </div>
+                    <div class="flex justify-between text-base font-bold text-gray-900 mt-4 pt-4 border-t border-gray-200">
+                        <p>Total</p>
+                        <p>$419.16</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping Information -->
+        <div class="bg-white shadow rounded-lg overflow-hidden mb-8">
+            <div class="px-6 py-5 border-b border-gray-200">
+                <h2 class="text-lg font-medium text-gray-900">Shipping Information</h2>
+            </div>
+            <div class="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Shipping Address</h3>
+                    <p class="mt-1 text-sm text-gray-900">John Doe</p>
+                    <p class="text-sm text-gray-900">123 Main Street</p>
+                    <p class="text-sm text-gray-900">Apartment 4B</p>
+                    <p class="text-sm text-gray-900">New York, NY 10001</p>
+                    <p class="text-sm text-gray-900">United States</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Shipping Method</h3>
+                    <p class="mt-1 text-sm text-gray-900">Standard Shipping</p>
+                    <p class="text-sm text-gray-900">Estimated delivery: 3-5 business days</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Contact Information</h3>
+                    <p class="mt-1 text-sm text-gray-900">john.doeexample.com</p>
+                    <p class="text-sm text-gray-900">(555) 123-4567</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Payment Method</h3>
+                    <div class="mt-1 flex items-center">
+                        <i class="fab fa-cc-visa text-2xl text-blue-600 mr-2"></i>
+                        <p class="text-sm text-gray-900">Visa ending in 4242</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="cart/checkout" class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                View Order Details
+            </a>
+            <a href="/home" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-md shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50">
+                Continue Shopping
+            </a>
+        </div>
+
+        <!-- Help Section -->
+        <div class="mt-12 text-center">
+            <h3 class="text-sm font-medium text-gray-900">Need help?</h3>
+            <p class="mt-1 text-sm text-gray-500">Contact our customer support at <a href="mailto:support@example.com" class="text-indigo-600 hover:text-indigo-500">supportexample.com</a></p>
+        </div>
+    </div>
