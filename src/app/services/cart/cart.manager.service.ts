@@ -1,9 +1,10 @@
 // cart.manager.service.ts
 import { Injectable } from '@angular/core';
-import { Cart, CartService } from './cart.service';
+import { CartService } from './cart.service';
 import { AuthManagerService } from '../auth/auth.manager.service';
 import { Observable, from, of } from 'rxjs';
 import { switchMap, catchError, map } from 'rxjs/operators';
+import { Cart } from '../../models/cart.model'; // Adjust the import path as needed
 
 @Injectable({
   providedIn: 'root',
