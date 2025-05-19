@@ -3,13 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Category} from '../../models/category.model'; // Adjust the path as needed
-// // Define the category interface
-// export interface Category {
-//   id: string;
-//   name: string;
-//   imageUrl: string;
-//   description: string;
-// }
 
 @Injectable({
   providedIn: 'root',
