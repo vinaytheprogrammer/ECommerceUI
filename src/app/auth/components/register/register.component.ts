@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth/auth.service';
+import { AuthManagerService } from '../../../services/auth/auth.manager.service';
 
 
 @Component({
@@ -16,12 +16,12 @@ export class RegisterComponent {
 
 
   constructor(
-    private authService: AuthService,
+    private authManagerService: AuthManagerService,
     private router: Router,
   ) {}
 
   onSubmit(): void {
-    this.authService.signup(this.username, this.email, this.password, this.role ).then((success) => {
+    this.authManagerService.signup(this.username, this.email, this.password, this.role ).then((success) => {
       if (success) {
         this.router.navigate(['/home']);
       } else {

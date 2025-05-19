@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth/auth.service';
+import { AuthManagerService } from '../../../services/auth/auth.manager.service';
 
 @Component({
   selector: 'app-login',
@@ -12,13 +12,13 @@ export class LoginComponent {
   password = '';
 
   constructor(
-    private authService: AuthService,
+    private authManagerService: AuthManagerService,
     private router: Router
   ) {}
 
   async onSubmit(): Promise<void> {
     try {
-      const isAuthenticated = await this.authService.login(this.username, this.password);
+      const isAuthenticated = await this.authManagerService.login(this.username, this.password);
       if (isAuthenticated) {
         this.router.navigate(['/home']);
       } else {
@@ -31,6 +31,6 @@ export class LoginComponent {
   }
 
   loginViaGoogle() {
-    this.authService.loginViaGoogle();
+    this.authManagerService.loginViaGoogle();
   }
 }
