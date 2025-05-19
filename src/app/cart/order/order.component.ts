@@ -1,37 +1,73 @@
 import { Component, OnInit } from '@angular/core';
 import { Order } from '../../models/order.model';
 import { OrderService } from '../../services/order/order.service';
+import { CartService } from 'src/app/services/cart/cart.service';
+import { CartItem } from 'src/app/models/cart.model';
+import { forkJoin } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss']
+  styleUrls: ['./order.component.scss'],
 })
 export class OrderComponent implements OnInit {
   orders: Order[] = [];
-  isLoading = true; // Add loading state
-  error: string | null = null; // Add error handling
+  cartItems: CartItem[] = [];
+  totalPrice = 0;
+  isLoading = true;
+  error: string | null = null;
+  currentUserOrder: Order = {} as Order;
 
-  constructor(private orderService: OrderService) {
-    // Don't call ngOnInit here - it will be called automatically by Angular
-    console.log('Constructor - orders:', this.orders); // Will be empty
-  }
+  constructor(
+    private orderService: OrderService,
+    private cartService: CartService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.isLoading = true;
     this.error = null;
-    
-    this.orderService.getAll().subscribe({
-      next: (data) => {
-        this.orders = data;
+
+    forkJoin({
+      orders: this.orderService.getAll(),
+      products: this.cartService.getAllProducts(),
+    }).subscribe({
+      next: ({ orders, products }) => {
+        this.orders = orders;
+        this.cartItems = products.map((product) => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+          imageUrl: product.images[0],
+        }));
+        this.totalPrice = this.getTotalPrice();
         this.isLoading = false;
-        console.log('Data loaded - orders:', this.orders);
+
+        this.currentUserOrder = this.orders.find(
+          (order) => order.user_id == this.authService.getCurrentUserId()
+        ) || ({} as Order);
+        
+
+        console.log('Orders:', this.orders);
+        console.log('Cart items:', this.cartItems);
+        console.log('Current User Info:', this.currentUserOrder);
+
       },
       error: (err) => {
-        this.error = 'Failed to load orders';
+        this.error = 'Failed to load orders or cart items';
         this.isLoading = false;
-        console.error('Error fetching orders:', err);
+        console.error('Data loading error:', err);
       },
     });
   }
+
+  getTotalPrice(): number {
+    return this.cartItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+  }
+
 }

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Order } from 'src/app/models/order.model';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { OrderService } from 'src/app/services/order/order.service';
+import { CartService } from 'src/app/services/cart/cart.service';
 
 @Component({
   selector: 'app-checkout',
@@ -19,11 +20,13 @@ export class CheckoutComponent implements OnInit {
   discountApplied: boolean = false;
   discountAmount: number = 0;
   user_id: string = '';
+  cartItems: any[] = []; // Replace with your actual cart item type
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private authService: AuthService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private cartService: CartService
   ) {
     this.checkoutForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -38,10 +41,18 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const queryParams = this.route.snapshot.queryParams;
-    this.totalPrice = Number(queryParams['totalPrice']) || 0;
+    
     this.calculateGrandTotal();
     this.user_id = this.authService.getCurrentUserId();
+    this.cartService.getAllProducts().subscribe(products => {
+      this.cartItems = products.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1, // default quantity
+        imageUrl: product.images[0]
+      }));
+    } );
   }
 
   calculateGrandTotal() {
@@ -84,7 +95,7 @@ export class CheckoutComponent implements OnInit {
       status: 'pending',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      subtotal: this.totalPrice,
+      subtotal: this.getTotalPrice(),
       taxAmount: 4.00,
       shippingAmount: 6.00,
       discountAmount: this.discountAmount,
@@ -118,4 +129,10 @@ export class CheckoutComponent implements OnInit {
   continueShopping() {
     console.log('Continue shopping clicked');
   }
+  
+  getTotalPrice(): number {
+    this.totalPrice = this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    return this.totalPrice;
+ }
+
 }

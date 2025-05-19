@@ -45,7 +45,7 @@
             </div>
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
             <p class="text-lg text-gray-600">Your order has been placed and will be processed shortly.</p>
-            <p class="text-gray-500 mt-2">Order #12345</p>
+            <p class="text-gray-500 mt-2">Order #{{this.currentUserOrder.id}}</p>
         </div>
 
         <!-- Order Summary -->
@@ -56,54 +56,47 @@
             <div class="px-6 py-5">
                 <!-- Order Items -->
                 <div class="space-y-6">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-20 h-20 rounded-md overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80" 
-                                 alt="Product image" class="w-full h-full object-center object-cover">
+                    <!-- Dynamic cart items -->
+                    <div *ngFor="let item of cartItems" class="flex items-start">
+                      <div class="flex-shrink-0 w-20 h-20 rounded-md overflow-hidden">
+                        <img [src]="item.imageUrl" 
+                             [alt]="item.name" 
+                             class="w-full h-full object-center object-cover">
+                      </div>
+                      <div class="ml-4 flex-1">
+                        <div class="flex items-center justify-between text-base font-medium text-gray-900">
+                          <h3>{{item.name}}</h3>
+                          <p class="ml-4">Rs.{{item.price | number:'1.2-2'}}</p>
                         </div>
-                        <div class="ml-4 flex-1">
-                            <div class="flex items-center justify-between text-base font-medium text-gray-900">
-                                <h3>Premium Headphones</h3>
-                                <p class="ml-4">$299.00</p>
-                            </div>
-                            <p class="mt-1 text-sm text-gray-500">Wireless, Noise Cancelling</p>
-                            <p class="mt-2 text-sm text-gray-500">Qty: 1</p>
-                        </div>
+                        <!-- Optional: You can add a description field to your items if needed -->
+                        <!-- <p class="mt-1 text-sm text-gray-500" *ngIf="item.description">{{item.description}}</p> -->
+                        <p class="mt-2 text-sm text-gray-500">Qty: {{item.quantity}}</p>
+                        
+                        <!-- Optional: Add item subtotal -->
+                        <p class="mt-1 text-sm font-medium text-gray-900">
+                          Subtotal: Rs.{{(item.price * item.quantity) | number:'1.2-2'}}
+                        </p>
+                      </div>
                     </div>
-
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-20 h-20 rounded-md overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=200&q=80" 
-                                 alt="Product image" class="w-full h-full object-center object-cover">
-                        </div>
-                        <div class="ml-4 flex-1">
-                            <div class="flex items-center justify-between text-base font-medium text-gray-900">
-                                <h3>Smartphone Case</h3>
-                                <p class="ml-4">$39.00</p>
-                            </div>
-                            <p class="mt-1 text-sm text-gray-500">Shockproof, Matte Black</p>
-                            <p class="mt-2 text-sm text-gray-500">Qty: 2</p>
-                        </div>
-                    </div>
-                </div>
+                  </div>
 
                 <!-- Order Totals -->
                 <div class="border-t border-gray-200 mt-6 pt-6">
                     <div class="flex justify-between text-base font-medium text-gray-900 mb-2">
                         <p>Subtotal</p>
-                        <p>$377.00</p>
+                        <p>Rs.{{this.getTotalPrice()}}</p>
                     </div>
                     <div class="flex justify-between text-base font-medium text-gray-900 mb-2">
                         <p>Shipping</p>
-                        <p>$12.00</p>
+                        <p>Rs.6.00</p>
                     </div>
                     <div class="flex justify-between text-base font-medium text-gray-900 mb-2">
                         <p>Tax</p>
-                        <p>$30.16</p>
+                        <p>Rs.4.00</p>
                     </div>
                     <div class="flex justify-between text-base font-bold text-gray-900 mt-4 pt-4 border-t border-gray-200">
                         <p>Total</p>
-                        <p>$419.16</p>
+                        <p>Rs.{{this.getTotalPrice()+10}}</p>
                     </div>
                 </div>
             </div>
@@ -117,21 +110,18 @@
             <div class="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <h3 class="text-sm font-medium text-gray-500">Shipping Address</h3>
-                    <p class="mt-1 text-sm text-gray-900">John Doe</p>
-                    <p class="text-sm text-gray-900">123 Main Street</p>
-                    <p class="text-sm text-gray-900">Apartment 4B</p>
-                    <p class="text-sm text-gray-900">New York, NY 10001</p>
-                    <p class="text-sm text-gray-900">United States</p>
+                    <p class="mt-1 text-sm text-gray-900">{{this.currentUserOrder.name}}</p>
+                    <p class="text-sm text-gray-900">{{this.currentUserOrder.shippingAddress}}</p>
                 </div>
                 <div>
                     <h3 class="text-sm font-medium text-gray-500">Shipping Method</h3>
-                    <p class="mt-1 text-sm text-gray-900">Standard Shipping</p>
+                    <p class="mt-1 text-sm text-gray-900">{{this.currentUserOrder.shippingMethod}}</p>
                     <p class="text-sm text-gray-900">Estimated delivery: 3-5 business days</p>
                 </div>
                 <div>
                     <h3 class="text-sm font-medium text-gray-500">Contact Information</h3>
-                    <p class="mt-1 text-sm text-gray-900">john.doeexample.com</p>
-                    <p class="text-sm text-gray-900">(555) 123-4567</p>
+                    <p class="mt-1 text-sm text-gray-900">{{this.currentUserOrder.user_email}}</p>
+                    <p class="text-sm text-gray-900">{{this.currentUserOrder.phone}}</p>
                 </div>
                 <div>
                     <h3 class="text-sm font-medium text-gray-500">Payment Method</h3>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../services/cart/cart.service';
 import { AuthService } from '../services/auth/auth.service'; // Adjust the path as needed
 import { CartItem } from '../models/cart.model'; // Adjust the path as needed
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-cart',
@@ -9,7 +10,7 @@ import { CartItem } from '../models/cart.model'; // Adjust the path as needed
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
-  cartId = ''; // You should load this dynamically based on the user
+  cartId = '';
   cartItems: CartItem[] = [];
   totalPrice = 0;
 
@@ -20,7 +21,6 @@ export class CartComponent implements OnInit {
     
    this.cartId = `cart-${this.authService.getCurrentUserId()}`; // Adjust this to get the actual cart ID
     this.cartService.getAllProducts().subscribe(products => {
-      console.log(products);
       this.cartItems = products.map(product => ({
         id: product.id,
         name: product.name,
