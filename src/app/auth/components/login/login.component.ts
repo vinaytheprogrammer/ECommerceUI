@@ -29,4 +29,8 @@ export class LoginComponent {
       alert('An error occurred during login.');
     }
   }
+
+  loginViaGoogle() {
+    this.authService.loginViaGoogle();
+  }
 }

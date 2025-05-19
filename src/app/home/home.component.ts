@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category/category.service';
 import { Category } from '../models/category.model';
+import { AuthService } from '../services/auth/auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -10,8 +12,24 @@ import { Category } from '../models/category.model';
 export class HomeComponent implements OnInit {
   categories: Category[] = [];
   categoryCount: number = 0;
+  token: string = '';
+  
+  constructor(
+    private categoryService: CategoryService,
+    private authService: AuthService,
+    private route: ActivatedRoute
 
-  constructor(private categoryService: CategoryService) {}
+  ) {
+    this.route.queryParams.subscribe((params) => {
+      this.authService.getAccessToken(params['code']).subscribe((res) => {
+        this.token = res.accessToken;
+        window.sessionStorage.removeItem('accessToken');
+        window.sessionStorage.removeItem('refreshToken');
+        window.sessionStorage.setItem('accessToken', res.accessToken);
+        window.sessionStorage.setItem('refreshToken', res.refreshToken);
+      });
+    });
+  }
 
   ngOnInit(): void {
     this.loadCategories();
@@ -29,34 +47,5 @@ export class HomeComponent implements OnInit {
     this.categoryService.getCategoryCount().subscribe((count) => {
       this.categoryCount = count;
     });
-  }
-
-  addCategory(): void {
-    const newCategory: Category = {
-      id: '4',
-      name: 'New Category',
-      imageUrl: 'https://example.com/image.jpg',
-      description: 'A new category description',
-    };
-    this.categoryService.createCategory(newCategory).subscribe(() => {
-      this.loadCategories();
-    });
-  }
-
-  updateCategory(): void {
-    const updatedCategory: Category = {
-      id: '3',
-      name: 'Updated 4K Ultra HD Monitor',
-      imageUrl: 'https://example.com/updated-image.jpg',
-      description: 'Updated description for 4K Monitor',
-    };
-    this.categoryService.updateCategory('3', updatedCategory).subscribe(() => {
-      this.loadCategories();
-    });
-  }
-
-
-  visit(category: Category) {
-    console.log('Category visited:', category);
   }
 }

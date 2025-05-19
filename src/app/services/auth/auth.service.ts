@@ -2,14 +2,21 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import { setToken, setUser } from '../../core/store/auth/auth.actions';
+import {
+  clearState,
+  setToken,
+  setUser,
+} from '../../core/store/auth/auth.actions';
 import {
   selectIsAuthenticated,
   selectUser,
   selectIsAdmin,
 } from '../../core/store/auth/auth.selectors';
-import { take } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
+const googleAuthUrl = environment.API_URL + `auth/google`;
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +28,64 @@ export class AuthService {
   constructor(
     private router: Router,
     private store: Store,
-    private http: HttpClient,
+    private http: HttpClient
   ) {}
+
+  oAuthLogin(url: string) {
+    const myform = document.createElement('form');
+    const body = {
+      client_id:
+        environment.CLIENT_ID ,
+      client_secret: environment.CLIENT_SECRET,
+    };
+    myform.method = 'POST';
+    myform.action = url;
+    myform.style.display = 'none';
+    myform.append('Content-Type', 'application/x-www-form-urlencoded');
+    Object.keys(body).forEach((key) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      input.value = (body as any)[key]; //NOSONAR
+      myform.appendChild(input);
+    });
+    document.body.appendChild(myform);
+    myform.submit();
+  }
+
+  loginViaGoogle() {
+    this.oAuthLogin(googleAuthUrl);
+  }
+  getAccessToken(code: string) {
+    return this.http
+      .post<{
+        accessToken: string;
+        refreshToken: string;
+        expires: number;
+      }>(`http://localhost:3000/auth/token`, {
+        code: code,
+        clientId:
+          environment.CLIENT_ID,
+      })
+      .pipe(
+        take(1),
+        tap((response) => {
+          if (response?.accessToken) {
+            this.isAuthenticated = true;
+            console.log('payload:', this.decodeTokenPayload(response.accessToken));
+            this.putInsideStorage(response.accessToken);
+          }
+        })
+      );
+  }
+
+  //OAuth refresh token
+  refreshToken(refreshToken: string) {
+    return this.http.post(`http://localhost:3000/auth/token-refresh`, {
+      refreshToken,
+    });
+  }
 
   decodeTokenPayload(accessToken: string): any {
     try {
@@ -109,6 +172,14 @@ export class AuthService {
 
   async logout(): Promise<void> {
     try {
+      //in case of OAuth tokens
+      window.sessionStorage.removeItem('accessToken');
+      window.sessionStorage.removeItem('refreshToken');
+
+      this.store.dispatch(clearState());
+      this.isAuthenticated = false;
+      this.store.dispatch(setUser({ user: null }));
+
       const refreshToken = localStorage.getItem('refreshToken');
       const response: any = await firstValueFrom(
         this.http.post(`${this.apiEndpoint}/logout`, { refreshToken })
@@ -119,8 +190,6 @@ export class AuthService {
       if (response?.message === 'Logout successful') {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        this.isAuthenticated = false;
-        this.store.dispatch(setUser({ user: null }));
       } else {
         console.error('Invalid logout response:', response);
       }
@@ -132,8 +201,19 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    const accessToken = localStorage.getItem('accessToken');
-    this.isAuthenticated = !!accessToken;
+    const authState = localStorage.getItem('authState');
+    console.log('Access Token:', authState);
+    if (authState) {
+      try {
+      const parsedState = JSON.parse(authState);
+      if (parsedState?.isAuthenticated) {
+        console.log('Extracted User:', parsedState.isAuthenticated);
+        this.isAuthenticated = parsedState.isAuthenticated;
+      }
+      } catch (error) {
+      console.error('Error parsing authState:', error);
+      }
+    }
     return this.isAuthenticated;
   }
 
@@ -179,9 +259,9 @@ export class AuthService {
       .select(selectUser)
       .pipe(take(1))
       .subscribe((user) => {
-      if (user && user.id) {
-        userId = user.id;
-      }
+        if (user && user.id) {
+          userId = user.id;
+        }
       });
     return userId;
   }
