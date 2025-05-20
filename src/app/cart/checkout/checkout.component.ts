@@ -22,6 +22,8 @@ export class CheckoutComponent implements OnInit {
   discountAmount: number = 0;
   user_id: string = '';
   cartItems: any[] = []; // Replace with your actual cart item type
+  orderData: Order | null = null; // Initialize orderData to null
+  
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -90,7 +92,7 @@ export class CheckoutComponent implements OnInit {
       return;
     }
 
-    const orderData : Order= {
+    let orderData : Order= {
   
       id: Math.floor(100 + Math.random() * 900).toString(), // Generate a random 3-digit ID
       user_id: String(this.user_id), // Dummy user ID, replace with actual logic
@@ -140,21 +142,50 @@ export class CheckoutComponent implements OnInit {
 
 
  sendNotification() {
+  // Prepare a detailed HTML email body with order details
+  const orderDetails = `
+    <h2>Order Confirmation</h2>
+    <p>Thank you for your purchase, <strong>${this.checkoutForm.value.firstName} ${this.checkoutForm.value.lastName}</strong>!</p>
+    <p>Your order has been successfully placed. Here are your order details:</p>
+    <ul>
+      <li><strong>Order ID:</strong> ${this.orderData?.id || 'N/A'}</li>
+      <li><strong>Status:</strong> ${this.orderData?.status || 'pending'}</li>
+      <li><strong>Order Date:</strong> ${this.orderData?.createdAt ? new Date(this.orderData.createdAt).toLocaleString() : new Date().toLocaleString()}</li>
+      <li><strong>Shipping Address:</strong> ${this.orderData?.shippingAddress || ''}</li>
+      <li><strong>Phone:</strong> ${this.orderData?.phone || ''}</li>
+      <li><strong>Email:</strong> ${this.orderData?.user_email || this.checkoutForm.value.email}</li>
+      <li><strong>Subtotal:</strong> $${this.orderData?.subtotal?.toFixed(2) || this.getTotalPrice().toFixed(2)}</li>
+      <li><strong>Tax:</strong> $${this.orderData?.taxAmount?.toFixed(2) || '4.00'}</li>
+      <li><strong>Shipping:</strong> $${this.orderData?.shippingAmount?.toFixed(2) || '6.00'}</li>
+      <li><strong>Discount:</strong> $${this.orderData?.discountAmount?.toFixed(2) || '0.00'}</li>
+      <li><strong>Grand Total:</strong> $${this.orderData?.grandTotal?.toFixed(2) || this.grandTotal.toFixed(2)}</li>
+      <li><strong>Tracking Number:</strong> ${this.orderData?.trackingNumber || ''}</li>
+    </ul>
+    <h3>Items:</h3>
+    <ul>
+      ${this.cartItems.map(item => `
+        <li>
+          <strong>${item.name}</strong> - $${item.price} x ${item.quantity}
+        </li>
+      `).join('')}
+    </ul>
+    <p>If you have any questions, please contact our support team.</p>
+    <p>Thank you for shopping with us!</p>
+  `;
+
   const payload = {
     subject: 'Order Notification',
-    body: 'Your order has been successfully placed.',
+    body: orderDetails,
     receiver: {
       to: [
         {
-          // id: this.authManagerService.getCurrentUserEmail()
-          id: 'vinay.gupta@sourcefuse.com',
+          id: this.checkoutForm.value.email || 'vinay.gupta@sourcefuse.com',
         },
       ],
     },
     type: 1,
     options: {
-      // to: this.authManagerService.getCurrentUserEmail(),
-      id: 'vinay.gupta@sourcefuse.com',
+      id: this.checkoutForm.value.email || 'vinay.gupta@sourcefuse.com',
       from: 'abhisheksingh55568@gmail.com',
       subject: 'Order Confirmation',
     },
