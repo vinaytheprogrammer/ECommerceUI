@@ -8,6 +8,7 @@ import { ManageProductsComponent } from './components/manage-products/manage-pro
 import { ManageUsersComponent } from './components/manage-users/manage-users.component';
 import { FormsModule } from '@angular/forms';
 import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
+import { CategoryManagementComponent } from './components/manage-category/manage-category.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { AdminProfileComponent } from './components/admin-profile/admin-profile.
     AdminDashboardComponent,
     ManageProductsComponent,
     ManageUsersComponent,
-    AdminProfileComponent
+    AdminProfileComponent,
+    CategoryManagementComponent
   ],
   imports: [
     CommonModule,

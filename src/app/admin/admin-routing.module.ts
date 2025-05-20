@@ -5,6 +5,7 @@ import { ManageProductsComponent } from './components/manage-products/manage-pro
 import { ManageUsersComponent } from './components/manage-users/manage-users.component';
 import { AdminGuard } from '../core/guards/admin.guard';
 import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
+import { CategoryManagementComponent } from './components/manage-category/manage-category.component';
 
 const routes: Routes = [
   { 
@@ -15,7 +16,8 @@ const routes: Routes = [
       { path: 'products', component: ManageProductsComponent },
       { path: 'users', component: ManageUsersComponent },
       { path: 'profile', component: AdminProfileComponent},
-      { path: '', redirectTo: 'products', pathMatch: 'full' }
+      { path: '', redirectTo: 'products', pathMatch: 'full' },
+      { path: 'category', component: CategoryManagementComponent}
     ]
   }
 ];
