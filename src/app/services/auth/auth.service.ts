@@ -28,7 +28,7 @@ export class AuthService {
   getAccessToken(code: string): Observable<any> {
     return this.http.post(`http://localhost:3000/auth/token`, {
       code,
-      clientId: environment.CLIENT_ID,
+      clientId:  environment.CLIENT_ID,
     });
   }
 

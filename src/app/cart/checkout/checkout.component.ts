@@ -5,6 +5,7 @@ import { Order } from 'src/app/models/order.model';
 import { AuthManagerService } from 'src/app/services/auth/auth.manager.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { CartManagerService } from 'src/app/services/cart/cart.manager.service';
+import { NotificationService } from 'src/app/services/notifications/notification.service';
 
 @Component({
   selector: 'app-checkout',
@@ -26,7 +27,8 @@ export class CheckoutComponent implements OnInit {
     private fb: FormBuilder,
     private authManagerService: AuthManagerService,
     private orderService: OrderService,
-    private cartManagerService: CartManagerService
+    private cartManagerService: CartManagerService,
+    private notificationService: NotificationService
   ) {
     this.checkoutForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -124,6 +126,7 @@ export class CheckoutComponent implements OnInit {
     console.log('Order submitted:', orderData);
    
     alert('Order placed successfully!');
+    this.sendNotification();
   }
 
   continueShopping() {
@@ -134,5 +137,53 @@ export class CheckoutComponent implements OnInit {
     this.totalPrice = this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     return this.totalPrice;
  }
+
+
+ sendNotification() {
+  const payload = {
+    subject: 'Order Notification',
+    body: 'Your order has been successfully placed.',
+    receiver: {
+      to: [
+        {
+          // id: this.authManagerService.getCurrentUserEmail()
+          id: 'vinay.gupta@sourcefuse.com',
+        },
+      ],
+    },
+    type: 1,
+    options: {
+      // to: this.authManagerService.getCurrentUserEmail(),
+      id: 'vinay.gupta@sourcefuse.com',
+      from: 'abhisheksingh55568@gmail.com',
+      subject: 'Order Confirmation',
+    },
+    isCritical: true,
+  };
+
+  let accessToken = '';
+  // Retrieve the authState from localStorage
+  const authState = localStorage.getItem('authState');
+
+  if (authState) {
+    // Parse the JSON string into an object
+    const parsedAuthState = JSON.parse(authState);
+
+    // Access the accessToken
+    let accessToken = parsedAuthState.accessToken;
+
+    console.log('Access Token:', accessToken);
+  } else {
+    console.error('authState not found in localStorage');
+  }
+  this.notificationService.sendNotification(accessToken, payload).subscribe({
+    next: () => {
+      console.log('Notification sent successfully');
+    },
+    error: (err) => {
+      console.error('Failed to send notification:', err);
+    },
+  });
+}
 
 }

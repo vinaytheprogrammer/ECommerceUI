@@ -45,15 +45,15 @@ export class OrderComponent implements OnInit {
         this.totalPrice = this.getTotalPrice();
         this.isLoading = false;
 
-        this.currentUserOrder = this.orders.find(
-          (order) => order.user_id == this.authManagerService.getCurrentUserId()
-        ) || ({} as Order);
-        
+        this.currentUserOrder =
+          this.orders.find(
+            (order) =>
+              order.user_id == this.authManagerService.getCurrentUserId()
+          ) || ({} as Order);
 
         console.log('Orders:', this.orders);
         console.log('Cart items:', this.cartItems);
         console.log('Current User Info:', this.currentUserOrder);
-
       },
       error: (err) => {
         this.error = 'Failed to load orders or cart items';
