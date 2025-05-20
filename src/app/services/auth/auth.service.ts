@@ -22,6 +22,7 @@ export class AuthService {
       email,
       role,
       password,
+      permissions: ['2'], // permission for notification service
     });
   }
 

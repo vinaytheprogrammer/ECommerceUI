@@ -56,7 +56,7 @@ export class CartManagerService {
         // If cart doesn't exist, create it
         const newCart: Cart = {
           id: cartId,
-          userId,
+          userId: String(userId),
           productsId: Array(quantity).fill(productId),
         };
         return this.cartService.create(newCart);
