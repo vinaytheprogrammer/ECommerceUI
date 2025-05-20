@@ -9,6 +9,8 @@ import { Category} from '../../models/category.model'; // Adjust the path as nee
 })
 export class CategoryService {
   private baseUrl = 'http://127.0.0.1:3022/categories'; // URL to the LoopBack 4 backend
+  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
 
   constructor(private http: HttpClient) {}
 
@@ -25,31 +27,19 @@ export class CategoryService {
 
   // POST create a new category
   createCategory(category: Category): Observable<Category> {
-    return this.http.post<Category>(this.baseUrl, category, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    });
+    return this.http.post<Category>(this.baseUrl, category, { headers: this.headers });
   }
 
   // PUT update an existing category (replace the entire category)
   updateCategory(id: string, category: Category): Observable<Category> {
     const url = `${this.baseUrl}/${id}`;
-    return this.http.put<Category>(url, category, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    });
+    return this.http.put<Category>(url, category, { headers: this.headers });
   }
 
   // PATCH update part of a category (update some fields)
   patchCategory(id: string, category: Partial<Category>): Observable<Category> {
     const url = `${this.baseUrl}/${id}`;
-    return this.http.patch<Category>(url, category, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    });
+    return this.http.patch<Category>(url, category, { headers: this.headers });
   }
 
   // DELETE a category by ID

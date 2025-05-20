@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Order } from 'src/app/models/order.model';
 import { OrderService } from '../../services/order/order.service';
 
 @Component({
   selector: 'app-order-history',
-  templateUrl: './order-history.component.html',
-  styleUrls: ['./order-history.component.scss']
+  templateUrl: './order-history.component.html'
 })
 export class OrderHistoryComponent implements OnInit {
 

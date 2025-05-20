@@ -67,4 +67,11 @@ export class CartManagerService {
   update(cartId: string, cart: Partial<Cart>): Observable<void> {
     return this.cartService.update(cartId, cart);
   }
+
+  clearCart(userId: string): void {
+    const cartId = `cart-${userId}`;
+    this.update(cartId, { productsId: [] }).subscribe(() => {
+      console.log('Cart cleared');
+    });
+  }
 }

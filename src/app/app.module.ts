@@ -24,15 +24,15 @@ import { FooterComponent } from './core/footer/footer.component';
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true
+        strictStateImmutability: true, // Check if the state is immutable
+        strictActionImmutability: true // Check if the actions are immutable
       }
     }),
     HttpClientModule
   ],
   providers: [ {
     provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
+    useClass: AuthInterceptor, // Use the AuthInterceptor for all HTTP requests for refreshing the token
     multi: true
   }],
   bootstrap: [AppComponent]

@@ -40,7 +40,6 @@ export class ProductService {
 
   // PATCH /products/{id}
   updateProduct(id: string, product: Partial<Product>): Observable<Product> {
-    console.log("Updating product with ID:", id);
     return this.http.patch<Product>(`${this.baseUrl}/${id}`, product, { headers: this.headers });
   }
 

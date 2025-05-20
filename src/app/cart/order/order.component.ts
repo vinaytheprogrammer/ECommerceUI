@@ -8,8 +8,7 @@ import { AuthManagerService } from 'src/app/services/auth/auth.manager.service';
 
 @Component({
   selector: 'app-order',
-  templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss'],
+  templateUrl: './order.component.html'
 })
 export class OrderComponent implements OnInit {
   orders: Order[] = [];
@@ -69,5 +68,4 @@ export class OrderComponent implements OnInit {
       0
     );
   }
-
 }

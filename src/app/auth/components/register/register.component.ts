@@ -5,8 +5,7 @@ import { AuthManagerService } from '../../../services/auth/auth.manager.service'
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  templateUrl: './register.component.html'
 })
 export class RegisterComponent {
   username = '';

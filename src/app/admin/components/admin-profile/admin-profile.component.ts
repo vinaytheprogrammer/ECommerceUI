@@ -6,8 +6,7 @@ import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-admin-profile',
-  templateUrl: './admin-profile.component.html',
-  styleUrls: ['./admin-profile.component.scss']
+  templateUrl: './admin-profile.component.html'
 })
 export class AdminProfileComponent implements OnInit {
 

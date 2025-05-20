@@ -5,8 +5,7 @@ import { AuthManagerService } from '../../../services/auth/auth.manager.service'
 
 @Component({
   selector: 'app-product-card',
-  templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.scss'],
+  templateUrl: './product-card.component.html'
 })
 export class ProductCardComponent {
   @Input() product!: Product;
@@ -19,10 +18,6 @@ export class ProductCardComponent {
 
   addToCart() {
     const userId = this.authManagerService.getCurrentUserId(); 
-
-    console.log('User ID:', userId);
-    console.log('Product ID:', this.product.id);
-    console.log('Quantity:', this.quantity);
     this.cartManagerService.addToCart(this.product.id, this.quantity, userId).subscribe({
       next: () => alert(`${this.quantity}x ${this.product.name} added to cart.`),
       error: (err) => console.error('Error adding to cart', err)
@@ -39,5 +34,7 @@ export class ProductCardComponent {
     }
   }
 
-  buyNow() {}
+  buyNow() {
+    this.addToCart();
+  }
 }

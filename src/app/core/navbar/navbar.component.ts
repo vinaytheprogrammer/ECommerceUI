@@ -3,8 +3,7 @@ import { AuthManagerService } from '../../services/auth/auth.manager.service';
 
 @Component({
   selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  templateUrl: './navbar.component.html'
 })
 export class NavbarComponent {
   constructor(public authManagerService: AuthManagerService) {}

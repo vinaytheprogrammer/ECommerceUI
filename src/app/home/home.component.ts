@@ -5,13 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
   categories: Category[] = [];
   categoryCount: number = 0;
-  token: string = '';
   
   constructor(
     private categoryService: CategoryService,

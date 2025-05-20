@@ -4,8 +4,7 @@ import { ProductService } from '../../../services/product/product.service'; // A
 import { Product } from '../../../models/product.model'; // Adjust path as needed
 @Component({
   selector: 'app-product-list',
-  templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.scss'],
+  templateUrl: './product-list.component.html'
 })
 export class ProductListComponent implements OnInit {
   id!: string;

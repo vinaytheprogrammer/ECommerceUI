@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CartManagerService } from '../services/cart/cart.manager.service';
 import { AuthManagerService } from '../services/auth/auth.manager.service'; // Adjust the path as needed
 import { CartItem } from '../models/cart.model'; // Adjust the path as needed
-import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-cart',
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss']
+  templateUrl: './cart.component.html'
 })
 export class CartComponent implements OnInit {
   cartId = '';
@@ -58,9 +56,9 @@ export class CartComponent implements OnInit {
   }
 
   clearCart(): void {
+    this.cartManagerService.clearCart(this.authManagerService.getCurrentUserId());
     this.cartItems = [];
-    this.cartManagerService.update(this.cartId, { productsId: [] }).subscribe(() => {
-      console.log('Cart cleared');
-    });
+    this.totalPrice = 0;
+    alert('Cart cleared');
   }
 }
