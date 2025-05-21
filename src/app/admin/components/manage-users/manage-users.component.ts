@@ -26,10 +26,9 @@ export class ManageUsersComponent {
       this.users = users;
       console.log('All users:', users);
     });
-
-   
   }
 
+  // Create a new user
   createUser() {
     this.userService.createUser(this.currentUser).subscribe({
       next: (response) => {

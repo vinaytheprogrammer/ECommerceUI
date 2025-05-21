@@ -1,44 +1,49 @@
 <div class="mb-6">
   <h2 class="text-2xl font-bold mb-4">Manage Products</h2>
-  <div class="flex justify-between items-center mb-3">
-    <input type="text" class="form-control w-1/2 mr-2 px-3 py-2 border rounded" placeholder="Search by name..." [(ngModel)]="searchText" (input)="applySearch()">
-    <button class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" (click)="openAddProductModal()">Add New Product</button>
+  <div class="flex justify-end mb-6">
+    <button class="add-user-btn bg-blue-400 hover:bg-blue-200 text-white px-5 py-2 rounded transition text-base" (click)="openAddProductModal()">
+      Add New Product
+    </button>
   </div>
 </div>
 
-<table class="min-w-full mt-4 border-collapse">
-  <thead>
-    <tr>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">ID</th>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">Name</th>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">Description</th>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">Price</th>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">Discount</th>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">Stock</th>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">Category ID</th>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">Brand ID</th>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">Image</th>
-      <th class="px-3 py-2 bg-gray-100 font-bold border-b">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let product of filteredProducts" class="odd:bg-gray-50">
-      <td class="px-3 py-2 border-b">{{ product.id }}</td>
-      <td class="px-3 py-2 border-b">{{ product.name }}</td>
-      <td class="px-3 py-2 border-b">{{ product.description }}</td>
-      <td class="px-3 py-2 border-b">Rs. {{ product.price }}</td>
-      <td class="px-3 py-2 border-b">{{ product.discount }}%</td>
-      <td class="px-3 py-2 border-b">{{ product.stock }}</td>
-      <td class="px-3 py-2 border-b">{{ product.categoryId }}</td>
-      <td class="px-3 py-2 border-b">{{ product.brandId }}</td>
-      <td class="px-3 py-2 border-b"><img [src]="product.images[0]" alt="Image" class="rounded" width="50"></td>
-      <td class="px-3 py-2 border-b">
-        <button class="bg-yellow-400 hover:bg-yellow-500 text-black px-2 py-1 rounded mr-2 text-sm" (click)="editProduct(product)">Edit</button>
-        <button class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-sm" (click)="deleteProduct(product.id)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="users-table-container overflow-x-auto">
+  <table class="users-table min-w-full mt-4 border-collapse shadow-md">
+    <thead>
+      <tr>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">ID</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Name</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Description</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Price</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Discount</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Stock</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Category ID</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Brand ID</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Image</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of filteredProducts" class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+        <td class="px-6 py-4 border-b">{{ product.id }}</td>
+        <td class="px-6 py-4 border-b">{{ product.name }}</td>
+        <td class="px-6 py-4 border-b">{{ product.description }}</td>
+        <td class="px-6 py-4 border-b">Rs. {{ product.price }}</td>
+        <td class="px-6 py-4 border-b">{{ product.discount }}%</td>
+        <td class="px-6 py-4 border-b">{{ product.stock }}</td>
+        <td class="px-6 py-4 border-b">{{ product.categoryId }}</td>
+        <td class="px-6 py-4 border-b">{{ product.brandId }}</td>
+        <td class="px-6 py-4 border-b">
+          <img [src]="product.images[0]" alt="Image" class="rounded w-12 h-12 object-cover" />
+        </td>
+        <td class="px-6 py-4 border-b">
+          <button class="bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded mr-2 text-sm transition">Edit</button>
+          <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition" (click)="deleteProduct(product.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <!-- Add/Edit Product Modal -->
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" *ngIf="showProductModal">

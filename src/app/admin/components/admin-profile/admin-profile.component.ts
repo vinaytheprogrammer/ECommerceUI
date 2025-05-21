@@ -73,4 +73,14 @@ export class AdminProfileComponent implements OnInit {
       role: authUser.role
     };
   }
+
+    // canExit(): boolean {
+  //   // Check if the form is dirty (has unsaved changes)
+  //   if (this.checkoutForm.dirty) {
+  //     return confirm(
+  //       'You have unsaved changes. Are you sure you want to leave?'
+  //     );
+  //   }
+  //   return true; // or false based on your logic
+  // }
 }

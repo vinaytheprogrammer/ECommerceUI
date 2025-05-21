@@ -9,6 +9,7 @@ import { ManageUsersComponent } from './components/manage-users/manage-users.com
 import { FormsModule } from '@angular/forms';
 import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
 import { CategoryManagementComponent } from './components/manage-category/manage-category.component';
+import { UnsavedChangesGuard } from '../core/guards/unsaved-changes.guard'; // Adjust the path as necessary
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CategoryManagementComponent } from './components/manage-category/manage
     CommonModule,
     AdminRoutingModule,
     FormsModule,
-   
-  ]
+  ],
+  providers: [UnsavedChangesGuard],
 })
+
 export class AdminModule { }

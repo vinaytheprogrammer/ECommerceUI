@@ -1,28 +1,25 @@
 <div class="admin-container">
-    <div class="admin-sidebar">
-      <h3>Admin Panel</h3>
-      <hr>
-      <ul class="nav flex-column mt-4">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/admin/products" routerLinkActive="active">Manage Products</a>
-      </li>
+  <div class="admin-sidebar">
+    <h3>Admin Panel</h3>
+    <hr>
+    <ul class="nav flex-column mt-4">
       <li class="nav-item">
         <a class="nav-link" routerLink="/admin/users" routerLinkActive="active">Manage Users</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/admin/category" routerLinkActive="active">Manage Categories</a>
+        <a class="nav-link" routerLink="/admin/products" routerLinkActive="active">Manage Products</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/cart/order-history" routerLinkActive="active">My Orders</a>
+        <a class="nav-link" routerLink="/admin/category" routerLinkActive="active">Manage Categories</a>
       </li>
-      </ul>
-      <ul class="nav flex-column mt-4">
+    </ul>
+    <ul class="nav flex-column mt-4">
       <li class="nav-item">
         <a class="nav-link" routerLink="/admin/profile" routerLinkActive="active">Profile</a>
       </li>
-      </ul>
-    </div>
-    <div class="admin-content">
-      <router-outlet></router-outlet>
-    </div>
+    </ul>
   </div>
+  <div class="admin-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
