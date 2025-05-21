@@ -51,7 +51,12 @@ export class ManageProductsComponent implements OnInit {
     }
   }
 
-  handleProductSubmit(): void {
+  handleProductSubmit(form: any): void {
+    if (!form.valid) {
+      alert('Please complete all fields before saving the product.');
+      return;
+    }
+
     this.currentProduct.images = [this.imageUrl];
 
     if (this.isEditing) {

@@ -45,7 +45,10 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.calculateGrandTotal();
+    this.grandTotal = this.cartManagerService.calculateGrandTotal(
+      this.totalPrice,
+      this.discountAmount
+    );
     this.user_id = this.authManagerService.getCurrentUserId();
     this.cartManagerService.getAllProducts().subscribe((products) => {
       this.cartItems = products.map((product) => ({
@@ -58,19 +61,16 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  calculateGrandTotal() {
-    const shipping = 6.0;
-    const tax = 4.0;
-    this.grandTotal = this.totalPrice + shipping + tax - this.discountAmount;
-  }
-
   applyPromoCode() {
     if (this.promoCode && !this.discountApplied) {
       // Here you would typically validate the promo code with your backend
       // For demo purposes, we'll apply a 10% discount
       this.discountAmount = this.totalPrice * 0.1;
       this.discountApplied = true;
-      this.calculateGrandTotal();
+      this.grandTotal = this.cartManagerService.calculateGrandTotal(
+        this.totalPrice,
+        this.discountAmount
+      );
     }
   }
 
@@ -78,7 +78,10 @@ export class CheckoutComponent implements OnInit {
     this.discountAmount = 0;
     this.discountApplied = false;
     this.promoCode = '';
-    this.calculateGrandTotal();
+    this.grandTotal = this.cartManagerService.calculateGrandTotal(
+      this.totalPrice,
+      this.discountAmount
+    );
   }
 
   setPaymentMethod(method: string) {
@@ -88,12 +91,13 @@ export class CheckoutComponent implements OnInit {
   completePurchase() {
     if (this.checkoutForm.invalid) {
       this.checkoutForm.markAllAsTouched();
+      alert('Please fill in all required fields correctly.');
       return;
     }
 
     let orderData: Order = {
       id: Math.floor(100 + Math.random() * 900).toString(), // Generate a random 3-digit ID
-      user_id: String(this.user_id), // Dummy user ID, replace with actual logic
+      user_id: String(this.user_id),
       status: 'pending',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -132,6 +136,7 @@ export class CheckoutComponent implements OnInit {
       },
     });
 
+    this.completeCheckout();
     this.sendNotification();
   }
 

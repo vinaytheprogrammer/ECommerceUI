@@ -74,4 +74,10 @@ export class CartManagerService {
       console.log('Cart cleared');
     });
   }
+
+  calculateGrandTotal(totalPrice: number, discountAmount: number): number {
+    const shipping = 6.0;
+    const tax = 4.0;
+    return totalPrice + shipping + tax - discountAmount;
+  }
 }

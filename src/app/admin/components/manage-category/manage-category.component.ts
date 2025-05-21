@@ -10,7 +10,6 @@ export class CategoryManagementComponent implements OnInit {
   categories: Category[] = [];
   filteredCategories: Category[] = [];
   searchText = '';
-
   showCategoryModal = false;
   isEditing = false;
   currentCategory: Category = { id: '', name: '', description: '', imageUrl: '' };
@@ -45,20 +44,24 @@ export class CategoryManagementComponent implements OnInit {
     this.showCategoryModal = true;
   }
 
-  handleCategorySubmit(): void {
-    if (this.isEditing) {
-      this.categoryService.updateCategory(this.currentCategory.id, this.currentCategory).subscribe(() => {
-        this.loadCategories();
-        this.showCategoryModal = false;
-      });
-    } else {
-      console.log('Creating new category:', this.currentCategory);
-      this.categoryService.createCategory(this.currentCategory).subscribe(() => {
-        this.loadCategories();
-        this.showCategoryModal = false;
-      });
-    }
+  handleCategorySubmit(form: any): void {
+  if (!form.valid) {
+    alert('Please complete all fields before saving the category.');
+    return;
   }
+
+  if (this.isEditing) {
+    this.categoryService.updateCategory(this.currentCategory.id, this.currentCategory).subscribe(() => {
+      this.loadCategories();
+      this.showCategoryModal = false;
+    });
+  } else {
+    this.categoryService.createCategory(this.currentCategory).subscribe(() => {
+      this.loadCategories();
+      this.showCategoryModal = false;
+    });
+  }
+}
 
   deleteCategory(id: string): void {
     if (confirm('Are you sure you want to delete this category?')) {

@@ -29,7 +29,12 @@ export class ManageUsersComponent {
   }
 
   // Create a new user
-  createUser() {
+  createUser(userForm: any) {
+    if (!userForm.valid) {
+      alert('Please complete all fields before saving the user.');
+      return;
+    }
+
     this.userService.createUser(this.currentUser).subscribe({
       next: (response) => {
         this.users.push(response);
@@ -79,7 +84,6 @@ export class ManageUsersComponent {
     this.currentUser = {
       name: '',
       email: '',
-      password: '',
       role: 'user'
     };
     this.editingUser = false;

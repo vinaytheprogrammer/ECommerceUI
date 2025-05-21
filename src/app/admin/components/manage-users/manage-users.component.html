@@ -9,14 +9,27 @@
   <!-- Add User Form -->
   <div class="user-form-container" *ngIf="showAddUserForm">
     <h2 class="text-xl font-bold mb-2">{{ editingUser ? 'Edit User' : 'Add New User' }}</h2>
-    <form (ngSubmit)="editingUser ? updateUser() : createUser()" #userForm="ngForm">
+    <form (ngSubmit)="editingUser ? updateUser() : createUser(userForm)" #userForm="ngForm">
       <div class="form-group">
         <label for="name">Username</label>
-        <input type="text" id="name" name="name" [(ngModel)]="currentUser.name" required>
+        <input type="text" id="name" name="name" [(ngModel)]="currentUser.name" required placeholder="Enter username"
+          #nameInput="ngModel">
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" [(ngModel)]="currentUser.email" required>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          [(ngModel)]="currentUser.email" 
+          required 
+          placeholder="Enter email address"
+          #emailInput="ngModel"
+        >
+        <div class="text-red-600 text-sm mt-1" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">
+          <span *ngIf="emailInput.errors?.['required']">Email is required.</span>
+          <span *ngIf="emailInput.errors?.['email']">Please enter a valid email address.</span>
+        </div>
       </div>
       <div class="form-group">
         <label for="role">Role</label>
@@ -27,7 +40,7 @@
       </div>
       <div class="form-actions">
         <button type="button" class="cancel-btn" (click)="cancelForm()">Cancel</button>
-        <button type="submit" class="submit-btn" [disabled]="!userForm.valid">
+        <button type="submit" class="submit-btn">
           {{ editingUser ? 'Update' : 'Create' }}
         </button>
       </div>
