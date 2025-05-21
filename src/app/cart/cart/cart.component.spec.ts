@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CartComponent } from './cart.component';
-import { CartManagerService } from '../services/cart/cart.manager.service';
-import { AuthManagerService } from '../services/auth/auth.manager.service';
+import { CartManagerService } from '../../services/cart/cart.manager.service';
+import { AuthManagerService } from '../../services/auth/auth.manager.service';
 import { of } from 'rxjs';
 
 fdescribe('CartComponent', () => {

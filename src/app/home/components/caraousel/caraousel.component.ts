@@ -38,14 +38,14 @@ export class CarouselComponent {
       imageUrl: 'https://blaupunktaudio.in/cdn/shop/files/Group_1_3.jpg?v=1730279162',
       title: 'Wireless Headphones',
       description: 'Immersive sound with noise cancellation.',
-      price: 299,
+      price: 2999,
       discount: 15,
     },
     {
       imageUrl: 'https://rukminim2.flixcart.com/fk-p-image/850/400/cf-chitrakaar-prod/b05e2c24db6921f16c56b221e2ddc338.jpeg?q=90',
       title: '4K Ultra HD Smart TV',
       description: 'Cinematic experience with built-in streaming apps.',
-      price: 899,
+      price: 8999,
       discount: 25,
     },
   ];

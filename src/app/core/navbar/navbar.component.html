@@ -8,25 +8,32 @@
     <!-- Right section: Auth + Cart -->
     <ul class="flex flex-col lg:flex-row items-center lg:space-x-4 w-full lg:w-auto">
       <li class="my-2 lg:my-0" *ngIf="authManagerService.isLoggedIn()">
-        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/cart" routerLinkActive="font-bold border-b-2 border-yellow-400">Cart</a>
-      </li>
-      <li class="my-2 lg:my-0" *ngIf="authManagerService.isAdmin()">
-        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/admin" routerLinkActive="font-bold border-b-2 border-yellow-400">Admin</a>
-      </li>
-      <li class="my-2 lg:my-0" *ngIf="!authManagerService.isAdmin() && authManagerService.isLoggedIn()">
-        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="home/user-profile" routerLinkActive="font-bold border-b-2 border-yellow-400">User</a>
-      </li>
-      <li class="my-2 lg:my-0" *ngIf="!authManagerService.isAdmin() && authManagerService.isLoggedIn()">
-        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="cart/order-history" routerLinkActive="font-bold border-b-2 border-yellow-400">Order History</a>
-      </li>
-      <li class="my-2 lg:my-0" *ngIf="!authManagerService.isLoggedIn()">
-        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/auth/login" routerLinkActive="font-bold border-b-2 border-yellow-400">Login</a>
-      </li>
-      <li class="my-2 lg:my-0" *ngIf="!authManagerService.isLoggedIn()">
-        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/auth/register" routerLinkActive="font-bold border-b-2 border-yellow-400">Register</a>
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/cart"
+          routerLinkActive="font-bold border-b-2 border-yellow-400">Cart</a>
       </li>
       <li class="my-2 lg:my-0" *ngIf="authManagerService.isLoggedIn()">
-        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition cursor-pointer" (click)="logout()">Logout</a>
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition"
+          routerLink="cart/order-history" routerLinkActive="font-bold border-b-2 border-yellow-400">Order History</a>
+      </li>
+      <li class="my-2 lg:my-0" *ngIf="authManagerService.isAdmin()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition" routerLink="/admin"
+          routerLinkActive="font-bold border-b-2 border-yellow-400">Admin</a>
+      </li>
+      <li class="my-2 lg:my-0" *ngIf="!authManagerService.isAdmin() && authManagerService.isLoggedIn()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition"
+          routerLink="home/user-profile" routerLinkActive="font-bold border-b-2 border-yellow-400">User</a>
+      </li>
+      <li class="my-2 lg:my-0" *ngIf="!authManagerService.isLoggedIn()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition"
+          routerLink="/auth/login" routerLinkActive="font-bold border-b-2 border-yellow-400">Login</a>
+      </li>
+      <li class="my-2 lg:my-0" *ngIf="!authManagerService.isLoggedIn()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition"
+          routerLink="/auth/register" routerLinkActive="font-bold border-b-2 border-yellow-400">Register</a>
+      </li>
+      <li class="my-2 lg:my-0" *ngIf="authManagerService.isLoggedIn()">
+        <a class="text-white px-4 py-2 hover:bg-gray-700 hover:text-yellow-400 rounded transition cursor-pointer"
+          (click)="logout()">Logout</a>
       </li>
     </ul>
   </div>

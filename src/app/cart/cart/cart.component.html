@@ -97,8 +97,10 @@
     </div>
     <div class="mt-6 flex flex-col sm:flex-row gap-4">
       <button
-        (click)="checkout()"
-        [routerLink]="['/cart/checkout']"
+        (click)="getTotalPrice() > 0 && checkout()"
+        (click)="getTotalPrice() > 0 && completeCart()"
+        [class.cursor-not-allowed]="getTotalPrice() === 0"
+        [disabled]="getTotalPrice() === 0"
         class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-6 rounded-md text-sm font-medium transition"
       >
         Checkout

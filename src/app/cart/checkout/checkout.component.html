@@ -1,7 +1,7 @@
 <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 bg-white rounded-lg shadow-md mt-8 mb-12">
     <div class="max-w-screen-xl max-md:max-w-xl mx-auto">
         <div class="flex items-start mb-16">
-            <div class="w-full" [routerLink]="['/cart']">
+            <div class="w-full">
                 <div class="flex items-center w-full">
                     <div
                         class="w-8 h-8 shrink-0 mx-[-1px] bg-blue-600 p-1.5 flex items-center justify-center rounded-full">
@@ -215,7 +215,7 @@
                             number:'1.2-2'}}</span></li>
                 </ul>
                 <div class="space-y-4 mt-8">
-                    <button type="button" (click)="completePurchase()" [routerLink]="['/cart/order']"
+                    <button type="button" (click)="completePurchase(); completeCheckout()"
                         class="rounded-md px-4 py-2.5 w-full text-sm font-medium tracking-wide bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
                         Complete Purchase
                     </button>

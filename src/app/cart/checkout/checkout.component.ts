@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Order } from 'src/app/models/order.model';
 import { AuthManagerService } from 'src/app/services/auth/auth.manager.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { CartManagerService } from 'src/app/services/cart/cart.manager.service';
 import { NotificationService } from 'src/app/services/notifications/notification.service';
+import { EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
 })
 export class CheckoutComponent implements OnInit {
+  @Output() checkoutCompleted = new EventEmitter<void>();
+
   checkoutForm: FormGroup;
   totalPrice: number = 0;
   grandTotal: number = 0;
@@ -24,7 +26,6 @@ export class CheckoutComponent implements OnInit {
   orderData: Order | null = null; // Initialize orderData to null
 
   constructor(
-    private route: ActivatedRoute,
     private fb: FormBuilder,
     private authManagerService: AuthManagerService,
     private orderService: OrderService,
@@ -115,6 +116,12 @@ export class CheckoutComponent implements OnInit {
       shippingAddress: `${this.checkoutForm.value.address}, ${this.checkoutForm.value.city}, ${this.checkoutForm.value.state}, ${this.checkoutForm.value.zipCode}`,
     };
 
+    console.log('Order submitted:', orderData);
+
+    this.cartManagerService.clearCart(String(this.user_id));
+    this.cartItems = [];
+    alert('Order placed successfully!');
+
     this.orderService.create(orderData).subscribe({
       next: (response) => {
         console.log('Order created successfully:', response);
@@ -125,12 +132,7 @@ export class CheckoutComponent implements OnInit {
       },
     });
 
-    console.log('Order submitted:', orderData);
-
-    alert('Order placed successfully!');
     this.sendNotification();
-    this.cartManagerService.clearCart(String(this.user_id));
-    this.cartItems = [];
   }
 
   continueShopping() {
@@ -245,5 +247,10 @@ export class CheckoutComponent implements OnInit {
         console.error('Failed to send notification:', err);
       },
     });
+  }
+
+  // for switching between components
+  completeCheckout() {
+    this.checkoutCompleted.emit();
   }
 }
