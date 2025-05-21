@@ -101,4 +101,16 @@ export class ManageUsersComponent {
     this.editingUser = false;
     this.showAddUserForm = false;
   }
+
+  canExit(): boolean {
+    // Check if the form is dirty (has unsaved changes)
+    const isDirty =
+      this.currentUser.name ||
+      this.currentUser.email ||
+      this.currentUser.role;
+    return (
+      !isDirty ||
+      confirm('Are you sure you want to leave this page? Any unsaved changes will be lost.')
+    );
+  }
 }

@@ -41,4 +41,10 @@ export class RegisterComponent {
       console.error('An error occurred during registration:', error);
     });
   }
+
+  canExit(): boolean {
+    // Check if the form is dirty (has unsaved changes)
+    const isDirty = this.username || this.email || this.password || this.role || this.secretKey;
+    return !isDirty || confirm('Are you sure you want to leave this page? Any unsaved changes will be lost.');
+  }
 }

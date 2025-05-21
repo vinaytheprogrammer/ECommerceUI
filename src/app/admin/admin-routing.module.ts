@@ -6,6 +6,7 @@ import { ManageUsersComponent } from './components/manage-users/manage-users.com
 import { AdminGuard } from '../core/guards/admin.guard';
 import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
 import { CategoryManagementComponent } from './components/manage-category/manage-category.component';
+import { UnsavedChangesGuard } from '../core/guards/unsaved-changes.guard';
 
 const routes: Routes = [
   { 
@@ -13,11 +14,11 @@ const routes: Routes = [
     component: AdminDashboardComponent,
     canActivate: [AdminGuard],
     children: [
-      { path: 'products', component: ManageProductsComponent },
-      { path: 'users', component: ManageUsersComponent },
+      { path: 'products', component: ManageProductsComponent, canDeactivate: [UnsavedChangesGuard] },
+      { path: 'users', component: ManageUsersComponent, canDeactivate: [UnsavedChangesGuard] },
+      { path: 'category', component: CategoryManagementComponent, canDeactivate: [UnsavedChangesGuard] },
       { path: 'profile', component: AdminProfileComponent},
-      { path: '', redirectTo: 'products', pathMatch: 'full' },
-      { path: 'category', component: CategoryManagementComponent}
+      { path: '', redirectTo: 'products', pathMatch: 'full' }
     ]
   }
 ];

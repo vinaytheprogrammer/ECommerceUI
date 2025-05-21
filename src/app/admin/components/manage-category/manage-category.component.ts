@@ -74,4 +74,10 @@ export class CategoryManagementComponent implements OnInit {
       });
     }
   }
+
+  canExit(): boolean {
+    // Check if the form is dirty (has unsaved changes)
+    const isDirty = this.currentCategory.name || this.currentCategory.description || this.currentCategory.imageUrl;
+    return !isDirty || confirm('Are you sure you want to leave this page? Any unsaved changes will be lost.');
+  }
 }

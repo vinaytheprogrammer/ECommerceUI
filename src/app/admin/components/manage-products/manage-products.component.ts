@@ -98,9 +98,13 @@ export class ManageProductsComponent implements OnInit {
     return Math.floor(1000 + Math.random() * 9000).toString();
   }
 
-
-
   private hideModal(): void {
     this.showProductModal = false;
+  }
+
+  canExit(): boolean {
+    // Check if the form is dirty (has unsaved changes)
+    const isDirty = this.currentProduct.name || this.currentProduct.price || this.currentProduct.description || this.imageUrl;
+    return !isDirty || confirm('Are you sure you want to leave this page? Any unsaved changes will be lost.');
   }
 }
