@@ -12,7 +12,7 @@ export class CategoryManagementComponent implements OnInit {
   searchText = '';
   showCategoryModal = false;
   isEditing = false;
-  currentCategory: Category = { id: '', name: '', description: '', imageUrl: '' };
+  currentCategory: Category = { name: '', description: '', imageUrl: '' };
 
   constructor(private categoryService: CategoryService) {}
 
@@ -34,7 +34,7 @@ export class CategoryManagementComponent implements OnInit {
 
   openAddCategoryModal(): void {
     this.isEditing = false;
-    this.currentCategory = { id: '', name: '', description: '', imageUrl: '' };
+    this.currentCategory = { name: '', description: '', imageUrl: '' };
     this.showCategoryModal = true;
   }
 
@@ -51,10 +51,14 @@ export class CategoryManagementComponent implements OnInit {
   }
 
   if (this.isEditing) {
-    this.categoryService.updateCategory(this.currentCategory.id, this.currentCategory).subscribe(() => {
-      this.loadCategories();
-      this.showCategoryModal = false;
-    });
+    if (this.currentCategory.id) {
+      this.categoryService.updateCategory(this.currentCategory.id, this.currentCategory).subscribe(() => {
+        this.loadCategories();
+        this.showCategoryModal = false;
+      });
+    } else {
+      alert('Category ID is missing. Cannot update category.');
+    }
   } else {
     this.categoryService.createCategory(this.currentCategory).subscribe(() => {
       this.loadCategories();

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/user/user.service';
+import { AuthManagerService } from '../../../services/auth/auth.manager.service';
 
 @Component({
   selector: 'app-manage-users',
   templateUrl: './manage-users.component.html',
-  styleUrls: ['./manage-users.component.scss']
+  styleUrls: ['./manage-users.component.scss'],
 })
 export class ManageUsersComponent {
   users: User[] = [];
@@ -14,15 +15,17 @@ export class ManageUsersComponent {
   currentUser: User = {
     name: '',
     email: '',
-    role: 'user'
+    role: 'user',
   };
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private authManagerService: AuthManagerService
+  ) {}
 
   ngOnInit(): void {
-   
     // Get all users
-    this.userService.getAllUsers().subscribe(users => {
+    this.userService.getAllUsers().subscribe((users) => {
       this.users = users;
       console.log('All users:', users);
     });
@@ -40,7 +43,7 @@ export class ManageUsersComponent {
         this.users.push(response);
         this.resetForm();
       },
-      error: (err) => console.error('Error creating user:', err)
+      error: (err) => console.error('Error creating user:', err),
     });
   }
 
@@ -51,27 +54,36 @@ export class ManageUsersComponent {
   }
 
   updateUser() {
-    if (!this.currentUser.user_id) return;
-    
-    this.userService.updateUserById(this.currentUser.user_id, this.currentUser).subscribe({
-      next: () => {
-        const index = this.users.findIndex(u => u.user_id === this.currentUser.user_id);
-        if (index !== -1) {
-          this.users[index] = { ...this.currentUser };
-        }
-        this.resetForm();
-      },
-      error: (err) => console.error('Error updating user:', err)
-    });
+    if (!this.currentUser.user_id) return; // Ensure user_id is present
+    this.userService
+      .updateUserById(this.currentUser.user_id, this.currentUser)
+      .subscribe({
+        next: () => {
+          const index = this.users.findIndex(
+            (u) => u.user_id === this.currentUser.user_id
+          );
+          if (index !== -1) {
+            this.users[index] = { ...this.currentUser };
+          }
+          this.resetForm();
+        },
+        error: (err) => console.error('Error updating user:', err),
+      });
   }
 
   deleteUser(id: number) {
+    // user can not delete himself
+    const currentUserId = this.authManagerService.getCurrentUserId();
+    if (Number(currentUserId) === id) {
+      alert("You cannot delete your own account.");
+      return;
+    }
     if (confirm('Are you sure you want to delete this user?')) {
       this.userService.deleteUserById(id).subscribe({
         next: () => {
-          this.users = this.users.filter(user => user.user_id !== id);
+          this.users = this.users.filter((user) => user.user_id !== id);
         },
-        error: (err) => console.error('Error deleting user:', err)
+        error: (err) => console.error('Error deleting user:', err),
       });
     }
   }
@@ -84,10 +96,9 @@ export class ManageUsersComponent {
     this.currentUser = {
       name: '',
       email: '',
-      role: 'user'
+      role: 'user',
     };
     this.editingUser = false;
     this.showAddUserForm = false;
   }
-
 }

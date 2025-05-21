@@ -31,8 +31,23 @@
             </div>
             <div class="w-2/3">
               <span *ngIf="!isEditing" class="block text-gray-800 font-medium">{{currentUser.email}}</span>
-              <input *ngIf="isEditing" [(ngModel)]="currentUser.email" 
-                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <div *ngIf="isEditing">
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                [(ngModel)]="currentUser.email" 
+                required 
+                email
+                placeholder="Enter email address"
+                #emailInput="ngModel"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <div class="text-red-600 text-sm mt-1" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">
+                <span *ngIf="emailInput.errors?.['required']">Email is required.</span>
+                <span *ngIf="emailInput.errors?.['email']">Please enter a valid email address.</span>
+              </div>
+              </div>
             </div>
           </div>
   

@@ -1,10 +1,26 @@
 <div class="mb-6">
   <h2 class="text-2xl font-bold mb-4">Manage Products</h2>
-  <div class="flex justify-end mb-6">
-    <button class="add-user-btn bg-blue-400 hover:bg-blue-200 text-white px-5 py-2 rounded transition text-base"
-      (click)="openAddProductModal()">
-      Add New Product
-    </button>
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex-1">
+      <input
+        type="text"
+        class="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        placeholder="Search products by name..."
+        [(ngModel)]="searchText"
+        (input)="applySearch()"
+      />
+    </div>
+    <div>
+      <button
+        class="bg-blue-400 hover:bg-blue-200 text-white px-6 py-2 rounded shadow transition font-semibold flex items-center gap-2"
+        (click)="openAddProductModal()"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add New Product
+      </button>
+    </div>
   </div>
 </div>
 
@@ -69,41 +85,41 @@
           <div class="w-full sm:w-1/2 px-1 sm:px-2 mb-4">
             <label class="block font-semibold mb-2">Product Name</label>
             <input type="text" class="w-full px-3 py-2 border rounded" [(ngModel)]="currentProduct.name" name="name"
-              required>
+              placeholder="Enter product name" required>
           </div>
           <div class="w-full sm:w-1/2 px-1 sm:px-2 mb-4">
             <label class="block font-semibold mb-2">Price</label>
             <input type="number" class="w-full px-3 py-2 border rounded" [(ngModel)]="currentProduct.price" name="price"
-              required>
+              placeholder="Enter product price" required>
           </div>
           <div class="w-full px-1 sm:px-2 mb-4">
             <label class="block font-semibold mb-2">Description</label>
             <textarea class="w-full px-3 py-2 border rounded min-h-[100px] max-h-[300px]"
-              [(ngModel)]="currentProduct.description" name="description" required></textarea>
+              [(ngModel)]="currentProduct.description" name="description" placeholder="Enter product description" required></textarea>
           </div>
           <div class="w-full sm:w-1/2 px-1 sm:px-2 mb-4">
             <label class="block font-semibold mb-2">Image URL</label>
-            <input type="text" class="w-full px-3 py-2 border rounded" [(ngModel)]="imageUrl" name="imageUrl" required>
+            <input type="text" class="w-full px-3 py-2 border rounded" [(ngModel)]="imageUrl" name="imageUrl" placeholder="Enter image URL" required>
           </div>
           <div class="w-full sm:w-1/2 px-1 sm:px-2 mb-4">
             <label class="block font-semibold mb-2">Discount (%)</label>
             <input type="number" class="w-full px-3 py-2 border rounded" [(ngModel)]="currentProduct.discount"
-              name="discount" required>
+              name="discount" placeholder="Enter discount percentage" required>
           </div>
           <div class="w-full sm:w-1/2 px-1 sm:px-2 mb-4">
             <label class="block font-semibold mb-2">Stock</label>
             <input type="number" class="w-full px-3 py-2 border rounded" [(ngModel)]="currentProduct.stock" name="stock"
-              required>
+              placeholder="Enter stock quantity" required>
           </div>
           <div class="w-full sm:w-1/2 px-1 sm:px-2 mb-4">
             <label class="block font-semibold mb-2">Category ID</label>
             <input type="text" class="w-full px-3 py-2 border rounded" [(ngModel)]="currentProduct.categoryId"
-              name="categoryId" required>
+              name="categoryId" placeholder="Enter category ID" required>
           </div>
           <div class="w-full sm:w-1/2 px-1 sm:px-2 mb-4">
             <label class="block font-semibold mb-2">Brand ID</label>
             <input type="text" class="w-full px-3 py-2 border rounded" [(ngModel)]="currentProduct.brandId"
-              name="brandId" required>
+              name="brandId" placeholder="Enter brand ID" required>
           </div>
         </div>
         <div class="flex flex-col sm:flex-row justify-end gap-2 border-t pt-4 mt-4">

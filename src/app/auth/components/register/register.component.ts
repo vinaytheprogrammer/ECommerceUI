@@ -12,14 +12,25 @@ export class RegisterComponent {
   email = '';
   password = '';
   role = '';
-
+  secretKey = '';
 
   constructor(
     private authManagerService: AuthManagerService,
     private router: Router,
   ) {}
 
-  onSubmit(): void {
+  onSubmit(registerForm : any): void {
+    if (!registerForm.valid) {
+      alert('Please complete all fields before registering.');
+      return;
+    } 
+
+    // Check if the secret key is correct
+    if (this.secretKey !== '1234') {
+      alert('Invalid secret key.');
+      return;
+    }
+    
     this.authManagerService.signup(this.username, this.email, this.password, this.role ).then((success) => {
       if (success) {
         this.router.navigate(['/home']);
