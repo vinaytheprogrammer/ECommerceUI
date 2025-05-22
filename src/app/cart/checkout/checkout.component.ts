@@ -6,6 +6,7 @@ import { OrderService } from 'src/app/services/order/order.service';
 import { CartManagerService } from 'src/app/services/cart/cart.manager.service';
 import { NotificationService } from 'src/app/services/notifications/notification.service';
 import { EventEmitter, Output } from '@angular/core';
+import { OrderItemManagerService } from 'src/app/services/orderitem/orderitem.manager.service';
 
 @Component({
   selector: 'app-checkout',
@@ -30,7 +31,8 @@ export class CheckoutComponent implements OnInit {
     private authManagerService: AuthManagerService,
     private orderService: OrderService,
     private cartManagerService: CartManagerService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private orderItemManagerService: OrderItemManagerService
   ) {
     this.checkoutForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -45,10 +47,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.grandTotal = this.cartManagerService.calculateGrandTotal(
-      this.totalPrice,
-      this.discountAmount
-    );
     this.user_id = this.authManagerService.getCurrentUserId();
     this.cartManagerService.getAllProducts().subscribe((products) => {
       this.cartItems = products.map((product) => ({
@@ -96,7 +94,7 @@ export class CheckoutComponent implements OnInit {
     }
 
     let orderData: Order = {
-      id: Math.floor(100 + Math.random() * 900).toString(), // Generate a random 3-digit ID
+      id: Math.floor(1000 + Math.random() * 9000).toString(), // Generate a random 4-digit ID
       user_id: String(this.user_id),
       status: 'pending',
       createdAt: new Date().toISOString(),
@@ -105,14 +103,17 @@ export class CheckoutComponent implements OnInit {
       taxAmount: 4.0,
       shippingAmount: 6.0,
       discountAmount: this.discountAmount,
-      grandTotal: this.grandTotal,
+      grandTotal: this.cartManagerService.calculateGrandTotal(
+        this.getTotalPrice(),
+        this.discountAmount
+      ),
       user_email: this.checkoutForm.value.email,
       shippingMethod: 'Standard',
       shippingStatus: 'Pending',
       trackingNumber: `PAY-${Math.random()
-        .toString(36)
-        .substr(2, 9)
-        .toUpperCase()}`,
+      .toString(36)
+      .substr(2, 9)
+      .toUpperCase()}`,
       shippedAt: Date.now().toString() + '3',
       deliverAt: Date.now().toString(),
       name: `${this.checkoutForm.value.firstName} ${this.checkoutForm.value.lastName}`,
@@ -122,22 +123,32 @@ export class CheckoutComponent implements OnInit {
 
     console.log('Order submitted:', orderData);
 
-    this.cartManagerService.clearCart(String(this.user_id));
-    this.cartItems = [];
-    alert('Order placed successfully!');
-
     this.orderService.create(orderData).subscribe({
       next: (response) => {
-        console.log('Order created successfully:', response);
-      },
-      error: (error) => {
-        console.error('Error creating order:', error);
-        alert('Failed to place the order. Please try again.');
-      },
-    });
+      console.log('Order created successfully:', response);
+      this.orderData = orderData;
 
-    this.completeCheckout();
-    this.sendNotification();
+        this.orderItemManagerService.putCartItemToOrderItem(
+          response.id,
+          this.cartItems.map(item => item.id)
+        ).subscribe({
+        next: (orderItemResponse) => {
+          console.log('Order item created successfully:', orderItemResponse);
+        },
+        error: (orderItemError) => {
+          console.error('Error creating order item:', orderItemError);
+        }
+        });
+      },
+
+      // Clear the cart after successful order creation
+      complete: () => {
+        this.cartManagerService.clearCart(this.user_id);
+        this.cartItems = [];
+        this.completeCheckout();
+        this.sendNotification();
+      }
+    });
   }
 
   continueShopping() {

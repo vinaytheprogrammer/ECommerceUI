@@ -48,6 +48,10 @@
     Your Shopping Cart
   </h2>
 
+  <div *ngIf="totalPrice === 0" class="text-center text-lg text-slate-500 mb-8">
+    Your cart is empty.
+  </div>
+  
   <!-- Cart Items -->
   <div class="space-y-6">
     <div

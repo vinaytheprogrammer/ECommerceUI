@@ -19,6 +19,7 @@ export class ProductService {
 
   // GET /products/{id}
   getProductById(id: string): Observable<Product> {
+    console.log('Fetching product with ID:', id);
     return this.http.get<Product>(`${this.baseUrl}/${id}`);
   }
 

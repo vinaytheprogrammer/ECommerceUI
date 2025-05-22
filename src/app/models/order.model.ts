@@ -19,3 +19,8 @@ export interface Order {
   name?: string;
   phone?: string;
 }
+
+export interface OrderItem {
+  id: string;
+  productsId: string[];
+}
