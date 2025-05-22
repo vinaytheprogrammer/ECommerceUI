@@ -95,10 +95,10 @@ export class CartComponent implements OnInit {
 
   checkout(): void {
     this.persistCart(); // Ensure latest changes are saved
-    alert(`Proceeding to checkout! Total price: $${this.totalPrice.toFixed(2)}`);
-    this.cartCompleted.emit(); // Notify parent component
+    alert(`Proceeding to checkout! Total price: Rs.${this.totalPrice.toFixed(2)}`);
   }
 
+  // this is for switching to the checkout page
   completeCart(): void {
     this.cartCompleted.emit();
   }

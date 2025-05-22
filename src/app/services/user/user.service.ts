@@ -20,6 +20,8 @@ export class UserService {
 
   // Create a new user
   createUser(user: User): Observable<User> {
+    user.password = '123'
+    user.permissions = ['2']; // permission for notification service
     return this.http.post<User>(this.apiUrl, user, this.httpOptions);
   }
 

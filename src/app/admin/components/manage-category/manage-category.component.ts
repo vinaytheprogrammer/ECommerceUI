@@ -55,6 +55,7 @@ export class CategoryManagementComponent implements OnInit {
       this.categoryService.updateCategory(this.currentCategory.id, this.currentCategory).subscribe(() => {
         this.loadCategories();
         this.showCategoryModal = false;
+        form.reset();
       });
     } else {
       alert('Category ID is missing. Cannot update category.');
@@ -63,6 +64,7 @@ export class CategoryManagementComponent implements OnInit {
     this.categoryService.createCategory(this.currentCategory).subscribe(() => {
       this.loadCategories();
       this.showCategoryModal = false;
+      form.reset();
     });
   }
 }

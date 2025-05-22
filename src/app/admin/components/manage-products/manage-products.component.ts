@@ -63,12 +63,14 @@ export class ManageProductsComponent implements OnInit {
       this.productService.updateProduct(String(this.currentProduct.id), this.currentProduct).subscribe(() => {
         this.loadProducts();
         this.hideModal();
+        form.reset();
       });
     } else {
       console.log('Creating product:', this.currentProduct);
       this.productService.createProduct(this.currentProduct).subscribe(() => {
         this.loadProducts();
         this.hideModal();
+        form.reset();
       });
     }
   }
