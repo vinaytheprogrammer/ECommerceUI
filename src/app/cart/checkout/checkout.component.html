@@ -200,18 +200,18 @@
                 <h2 class="text-xl text-slate-900 font-semibold mb-6">Order Summary</h2>
                 <ul class="text-slate-500 font-medium space-y-4">
                     <li class="flex flex-wrap gap-4 text-sm">Subtotal <span
-                            class="ml-auto font-semibold text-slate-900">Rs.{{this.getTotalPrice() |
+                            class="ml-auto font-semibold text-slate-900">₹{{this.getTotalPrice() |
                             number:'1.2-2'}}</span></li>
                     <li class="flex flex-wrap gap-4 text-sm">Discount <span
-                            class="ml-auto font-semibold text-slate-900">- Rs.{{discountAmount | number:'1.2-2'}}</span>
+                            class="ml-auto font-semibold text-slate-900">- ₹{{discountAmount | number:'1.2-2'}}</span>
                     </li>
                     <li class="flex flex-wrap gap-4 text-sm">Shipping <span
-                            class="ml-auto font-semibold text-slate-900">+ Rs.6.00</span></li>
+                            class="ml-auto font-semibold text-slate-900">+ ₹6.00</span></li>
                     <li class="flex flex-wrap gap-4 text-sm">Tax <span class="ml-auto font-semibold text-slate-900">+
-                            Rs.4.00</span></li>
+                            ₹4.00</span></li>
                     <hr class="border-slate-300" />
                     <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">Total <span
-                            class="ml-auto">Rs.{{this.getTotalPrice() + this.discountAmount + 10|
+                            class="ml-auto">₹{{this.getTotalPrice() + this.discountAmount + 10|
                             number:'1.2-2'}}</span></li>
                 </ul>
                 <div class="space-y-4 mt-8">

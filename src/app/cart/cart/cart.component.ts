@@ -102,7 +102,7 @@ export class CartComponent implements OnInit {
   checkout(): void {
     this.persistCart(); // Ensure latest changes are saved
     alert(
-      `Proceeding to checkout! Total price: Rs.${this.totalPrice.toFixed(2)}`
+      `Proceeding to checkout! Total price: ₹${this.totalPrice.toFixed(2)}`
     );
   }
 
