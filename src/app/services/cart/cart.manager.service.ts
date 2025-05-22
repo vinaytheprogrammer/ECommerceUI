@@ -4,7 +4,9 @@ import { CartService } from './cart.service';
 import { AuthManagerService } from '../auth/auth.manager.service';
 import { Observable, from, of } from 'rxjs';
 import { switchMap, catchError, map } from 'rxjs/operators';
-import { Cart } from '../../models/cart.model'; // Adjust the import path as needed
+import { Cart, CartItem } from '../../models/cart.model'; // Adjust the import path as needed
+import { Product } from '../../models/product.model'; // Adjust the import path as needed
+// import { ProductService } from '../product/product.service'; // Adjust the import path as needed
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +14,11 @@ import { Cart } from '../../models/cart.model'; // Adjust the import path as nee
 export class CartManagerService {
   constructor(
     private cartService: CartService,
-    private authManagerService: AuthManagerService
+    private authManagerService: AuthManagerService,
+    // private productService: ProductService
   ) {}
 
-  getAllProducts(): Observable<any[]> {
+  getAllCartProductsOfCurrentUser(): Observable<any[]> {
     const userId = this.authManagerService.getCurrentUserId();
     return this.getCartProducts(userId);
   }
@@ -80,4 +83,40 @@ export class CartManagerService {
     const tax = 4.0;
     return totalPrice + shipping + tax - discountAmount;
   }
+
+  //restructure the cart items to reduce the length of the cart items by increasing the quantity of the same product
+  private mapProductsToCartItems(productIds: string[], products: Product[]): CartItem[] {
+    const countMap = productIds.reduce<Record<string, number>>((acc, id) => {
+      acc[id] = (acc[id] || 0) + 1;
+      return acc;
+    }, {});
+
+    const uniqueProducts = Array.from(
+      new Map(products.map(p => [p.id, p])).values()
+    );
+
+    return uniqueProducts
+      .filter(p => countMap[p.id])
+      .map(p => ({
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        quantity: countMap[p.id],
+        imageUrl: p.images[0] || ''
+      }));
+  }
+
+  wrapCartProductsToItems(): Observable<CartItem[]> {
+    return this.getAllCartProductsOfCurrentUser().pipe(
+      map((products: Product[]) => {
+        const productIds = products.map((product) => product.id);
+        return this.mapProductsToCartItems(productIds, products);
+      }),
+      catchError((err) => {
+        console.error('Failed to load cart products:', err);
+        return of([]);
+      })
+    );
+  }
+  
 }

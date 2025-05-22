@@ -27,16 +27,18 @@ export class CartComponent implements OnInit {
   }
 
   loadCart(): void {
-    this.cartManagerService.getAllProducts().subscribe({
-      next: (products) => {
-        const productIds = products.map((product) => product.id);
-        this.cartItems = this.mapProductsToCartItems(productIds, products);
+
+    //to restructure the cart items
+    this.cartManagerService.wrapCartProductsToItems().subscribe({
+      next: (cartItems) => {
+        this.cartItems = cartItems;
         this.updateTotalPrice();
+        console.log('Cart Items:', this.cartItems);
       },
       error: (err) => {
-        console.error('Failed to load cart products:', err);
+        console.error('Failed to load cart items:', err);
         this.cartItems = [];
-      }
+      },
     });
   }
 
@@ -52,18 +54,16 @@ export class CartComponent implements OnInit {
   }
 
   removeItem(productId: string): void {
-    const index = this.cartItems.findIndex(item => item.id === productId);
+    const index = this.cartItems.findIndex((item) => item.id === productId);
     if (index !== -1) {
       const item = this.cartItems[index];
-      item.quantity > 1
-        ? item.quantity--
-        : this.cartItems.splice(index, 1);
+      item.quantity > 1 ? item.quantity-- : this.cartItems.splice(index, 1);
       this.persistCart();
     }
   }
 
   incrementQuantity(productId: string): void {
-    const item = this.cartItems.find(item => item.id === productId);
+    const item = this.cartItems.find((item) => item.id === productId);
     if (item) {
       item.quantity++;
       this.persistCart();
@@ -71,7 +71,7 @@ export class CartComponent implements OnInit {
   }
 
   decrementQuantity(productId: string): void {
-    const item = this.cartItems.find(item => item.id === productId);
+    const item = this.cartItems.find((item) => item.id === productId);
     if (item) {
       item.quantity > 1 ? item.quantity-- : this.removeItem(productId);
       this.persistCart();
@@ -79,15 +79,21 @@ export class CartComponent implements OnInit {
   }
 
   persistCart(): void {
-    const productIds = this.cartItems.flatMap(item => Array(item.quantity).fill(item.id));
-    this.cartManagerService.update(this.cartId, { productsId: productIds }).subscribe({
-      next: () => this.updateTotalPrice(),
-      error: (err) => console.error('Failed to update cart:', err)
-    });
+    const productIds = this.cartItems.flatMap((item) =>
+      Array(item.quantity).fill(item.id)
+    );
+    this.cartManagerService
+      .update(this.cartId, { productsId: productIds })
+      .subscribe({
+        next: () => this.updateTotalPrice(),
+        error: (err) => console.error('Failed to update cart:', err),
+      });
   }
 
   clearCart(): void {
-    this.cartManagerService.clearCart(this.authManagerService.getCurrentUserId());
+    this.cartManagerService.clearCart(
+      this.authManagerService.getCurrentUserId()
+    );
     this.cartItems = [];
     this.updateTotalPrice();
     alert('Cart cleared');
@@ -95,7 +101,9 @@ export class CartComponent implements OnInit {
 
   checkout(): void {
     this.persistCart(); // Ensure latest changes are saved
-    alert(`Proceeding to checkout! Total price: Rs.${this.totalPrice.toFixed(2)}`);
+    alert(
+      `Proceeding to checkout! Total price: Rs.${this.totalPrice.toFixed(2)}`
+    );
   }
 
   // this is for switching to the checkout page
@@ -103,24 +111,24 @@ export class CartComponent implements OnInit {
     this.cartCompleted.emit();
   }
 
-  private mapProductsToCartItems(productIds: string[], products: Product[]): CartItem[] {
-    const countMap = productIds.reduce<Record<string, number>>((acc, id) => {
-      acc[id] = (acc[id] || 0) + 1;
-      return acc;
-    }, {});
+  // private mapProductsToCartItems(productIds: string[], products: Product[]): CartItem[] {
+  //   const countMap = productIds.reduce<Record<string, number>>((acc, id) => {
+  //     acc[id] = (acc[id] || 0) + 1;
+  //     return acc;
+  //   }, {});
 
-    const uniqueProducts = Array.from(
-      new Map(products.map(p => [p.id, p])).values()
-    );
+  //   const uniqueProducts = Array.from(
+  //     new Map(products.map(p => [p.id, p])).values()
+  //   );
 
-    return uniqueProducts
-      .filter(p => countMap[p.id])
-      .map(p => ({
-        id: p.id,
-        name: p.name,
-        price: p.price,
-        quantity: countMap[p.id],
-        imageUrl: p.images[0] || ''
-      }));
-  }
+  //   return uniqueProducts
+  //     .filter(p => countMap[p.id])
+  //     .map(p => ({
+  //       id: p.id,
+  //       name: p.name,
+  //       price: p.price,
+  //       quantity: countMap[p.id],
+  //       imageUrl: p.images[0] || ''
+  //     }));
+  // }
 }

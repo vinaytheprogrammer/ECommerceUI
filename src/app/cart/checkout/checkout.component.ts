@@ -48,7 +48,7 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.user_id = this.authManagerService.getCurrentUserId();
-    this.cartManagerService.getAllProducts().subscribe((products) => {
+    this.cartManagerService.getAllCartProductsOfCurrentUser().subscribe((products) => {
       this.cartItems = products.map((product) => ({
         id: product.id,
         name: product.name,

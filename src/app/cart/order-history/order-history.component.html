@@ -1,48 +1,38 @@
-<div class="max-w-3xl mx-auto mt-8 flex justify-end">
-    <div class="relative w-72">
-        <input
-            type="text"
-            [(ngModel)]="searchTerm"
-            placeholder="Search by Order ID"
-            class="border border-gray-300 rounded-full px-5 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm transition"
-            (input)="applySearch()"
-        />
-        <span class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8" />
-                <path d="M21 21l-4.35-4.35" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </span>
-    </div>
+<div class="max-w-3xl mx-auto mt-14 mb-14 flex justify-end">
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search by Order ID"
+        class="border border-gray-300 bg-gray-50 rounded-full px-5 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow transition placeholder-gray-500 pr-12"
+        (input)="applySearch()" />
 </div>
 
 
-<div *ngIf="orders.length > 0; else noOrders" class="max-w-3xl mx-auto mt-10">
+<div *ngIf="orders.length > 0; else noOrders" class="max-w-6xl mx-auto mt-10 mb-10">
     <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Your Order History</h2>
-    <div *ngFor="let order of filteredOrders" class="bg-white shadow-lg rounded-lg p-6 mb-8 border border-gray-200">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-semibold text-indigo-700">Order #{{ order.id }}</h3>
-            <span class="px-3 py-1 rounded-full text-sm font-medium"
-                [ngClass]="{
-                    'bg-green-100 text-green-700': order.status === 'Delivered',
-                    'bg-yellow-100 text-yellow-700': order.status === 'Processing',
-                    'bg-red-100 text-red-700': order.status === 'Cancelled'
-                }">
-                {{ order.status }}
-            </span>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
-            <div>
-                <p><span class="font-medium">Created At:</span> {{ order.createdAt | date:'medium' }}</p>
-                <p><span class="font-medium">Shipping Address:</span> {{ order.shippingAddress }}</p>
-                <p><span class="font-medium">Tracking Number:</span> {{ order.trackingNumber }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let order of filteredOrders"
+            class="bg-white shadow-lg rounded-lg p-6 border border-gray-200 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-semibold text-indigo-700">Order #{{ order.id }}</h3>
+                <span class="px-3 py-1 rounded-full text-sm font-medium" [ngClass]="{
+                        'bg-green-100 text-green-700': order.status === 'Delivered',
+                        'bg-yellow-100 text-yellow-700': order.status === 'Processing',
+                        'bg-red-100 text-red-700': order.status === 'Cancelled'
+                    }">
+                    {{ order.status }}
+                </span>
             </div>
-            <div>
-                <p><span class="font-medium">Subtotal:</span> ₹{{ order.subtotal }}</p>
-                <p><span class="font-medium">Tax:</span> ₹{{ order.taxAmount }}</p>
-                <p><span class="font-medium">Shipping:</span> ₹{{ order.shippingAmount }}</p>
-                <p><span class="font-medium">Discount:</span> ₹{{ order.discountAmount }}</p>
-                <p class="mt-2 text-lg font-bold text-indigo-700"><span>Total:</span> ₹{{ order.grandTotal }}</p>
+            <div class="grid grid-cols-1 gap-2 text-gray-700 flex-grow">
+                <div>
+                    <p><span class="font-medium">Created At:</span> {{ order.createdAt | date:'medium' }}</p>
+                    <p><span class="font-medium">Shipping Address:</span> {{ order.shippingAddress }}</p>
+                    <p><span class="font-medium">Tracking Number:</span> {{ order.trackingNumber }}</p>
+                </div>
+                <div>
+                    <p><span class="font-medium">Subtotal:</span> ₹{{ order.subtotal }}</p>
+                    <p><span class="font-medium">Tax:</span> ₹{{ order.taxAmount }}</p>
+                    <p><span class="font-medium">Shipping:</span> ₹{{ order.shippingAmount }}</p>
+                    <p><span class="font-medium">Discount:</span> ₹{{ order.discountAmount }}</p>
+                    <p class="mt-2 text-lg font-bold text-indigo-700"><span>Total:</span> ₹{{ order.grandTotal }}</p>
+                </div>
             </div>
         </div>
     </div>
@@ -50,7 +40,8 @@
 
 <ng-template #noOrders>
     <div class="flex flex-col items-center justify-center mt-20">
-        <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" stroke-width="1.5"
+            viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18V3H3zm3 6h12M9 9v12m6-12v12" />
         </svg>
         <p class="text-lg text-gray-500">No orders found for your account.</p>

@@ -26,7 +26,7 @@ export class RegisterComponent {
     } 
 
     // Check if the secret key is correct
-    if (this.secretKey !== '1234') {
+    if (this.role == 'admin' && this.secretKey !== '1234') {
       alert('Invalid secret key.');
       return;
     }

@@ -6,10 +6,11 @@ import { CartItem } from 'src/app/models/cart.model';
 import { forkJoin } from 'rxjs';
 import { AuthManagerService } from 'src/app/services/auth/auth.manager.service';
 import { ProductService } from 'src/app/services/product/product.service';
+// import { CartManagerService } from 'src/app/services/cart/cart.manager.service';
 
 @Component({
   selector: 'app-order',
-  templateUrl: './order.component.html'
+  templateUrl: './order.component.html',
 })
 export class OrderComponent implements OnInit {
   orders: Order[] = [];
@@ -46,13 +47,38 @@ export class OrderComponent implements OnInit {
         forkJoin(productObservables).subscribe({
           next: (productDetails) => {
             console.log('Resolved Product Details:', productDetails);
-            this.cartItems = productDetails.map((product: any) => ({
-              id: product.id ? String(product.id) : '',
-              name: product.name ?? '',
-              price: product.price,
-              quantity: 1,
-              imageUrl: product.images ? product.images[0] : '',
-            }));
+            // Build a count map for product IDs
+
+            const productIds = (products ?? []).map((product: any) =>
+              String(product)
+            );
+
+            // Create a count map to track the quantity of each product ID
+            const countMap = productIds.reduce<Record<string, number>>(
+              (acc, id) => {
+                acc[id] = (acc[id] || 0) + 1;
+                return acc;
+              },
+              {}
+            );
+
+            // Get unique products by ID
+            const uniqueProducts = Array.from(
+              new Map(
+                productDetails.map((p: any) => [String(p.id), p])
+              ).values()
+            );
+
+            // Build cartItems array in the desired format
+            this.cartItems = uniqueProducts
+              .filter((p: any) => countMap[String(p.id)])
+              .map((p: any) => ({
+                id: String(p.id),
+                name: p.name ?? '',
+                price: p.price,
+                quantity: countMap[String(p.id)],
+                imageUrl: p.images && p.images[0] ? p.images[0] : '',
+              }));
             console.log('Cart Items:', this.cartItems);
             this.totalPrice = this.getTotalPrice();
           },
@@ -60,14 +86,15 @@ export class OrderComponent implements OnInit {
             this.error = 'Failed to load product details';
             this.isLoading = false;
             console.error('Product loading error:', err);
-          }
+          },
         });
         this.totalPrice = this.getTotalPrice();
         this.isLoading = false;
-        this.currentUserOrder = this.orders.find(
-          (order) =>
-            order.user_id == this.authManagerService.getCurrentUserId()
-        ) || ({} as Order);
+        this.currentUserOrder =
+          this.orders.find(
+            (order) =>
+              order.user_id == this.authManagerService.getCurrentUserId()
+          ) || ({} as Order);
 
         console.log('Orders:', this.orders);
         console.log('Cart items:', this.cartItems);
