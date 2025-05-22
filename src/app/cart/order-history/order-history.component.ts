@@ -9,7 +9,7 @@ import { OrderService } from '../../services/order/order.service';
 export class OrderHistoryComponent implements OnInit {
 
     orders: Order[] = [];
-
+    filteredOrders: Order[] = [];
     constructor(private orderService: OrderService) {}
 
     ngOnInit(): void {
@@ -24,6 +24,7 @@ export class OrderHistoryComponent implements OnInit {
           (orders: Order[]) => {
             console.log('Output of orderService.getAll():', orders);
             this.orders = orders.filter(order => order.user_id == userId);
+            this.filteredOrders = this.orders;
             console.log('Filtered orders:', this.orders);
           },
           (error) => {
@@ -34,5 +35,15 @@ export class OrderHistoryComponent implements OnInit {
         console.error('User ID not found in authState');
       }
     }
+
+    searchTerm: string = '';
+    applySearch(): void {
+      const term = this.searchTerm.toLowerCase();
+      this.filteredOrders = this.orders.filter(order =>
+        order.id.toString().toLowerCase().includes(term) ||
+        (order.status && order.status.toLowerCase().includes(term))
+      );
+    }
+
 
 }

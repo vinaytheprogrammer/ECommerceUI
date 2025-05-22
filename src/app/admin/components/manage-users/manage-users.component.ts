@@ -15,7 +15,7 @@ export class ManageUsersComponent {
   currentUser: User = {
     name: '',
     email: '',
-    role: 'user',
+    role: '',
   };
 
   constructor(
@@ -96,7 +96,7 @@ export class ManageUsersComponent {
     this.currentUser = {
       name: '',
       email: '',
-      role: 'user',
+      role: '',
     };
     this.editingUser = false;
     this.showAddUserForm = false;

@@ -1,6 +1,25 @@
+<div class="max-w-3xl mx-auto mt-8 flex justify-end">
+    <div class="relative w-72">
+        <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            placeholder="Search by Order ID"
+            class="border border-gray-300 rounded-full px-5 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm transition"
+            (input)="applySearch()"
+        />
+        <span class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </span>
+    </div>
+</div>
+
+
 <div *ngIf="orders.length > 0; else noOrders" class="max-w-3xl mx-auto mt-10">
     <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Your Order History</h2>
-    <div *ngFor="let order of orders" class="bg-white shadow-lg rounded-lg p-6 mb-8 border border-gray-200">
+    <div *ngFor="let order of filteredOrders" class="bg-white shadow-lg rounded-lg p-6 mb-8 border border-gray-200">
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-xl font-semibold text-indigo-700">Order #{{ order.id }}</h3>
             <span class="px-3 py-1 rounded-full text-sm font-medium"
