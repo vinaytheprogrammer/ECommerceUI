@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CartManagerService } from '../../services/cart/cart.manager.service';
-import { AuthManagerService } from '../../services/auth/auth.manager.service'; // Adjust the path as needed
-import { CartItem } from '../../models/cart.model'; // Adjust the path as needed
-import { EventEmitter, Output } from '@angular/core';
-import { Product } from '../../models/product.model'; // Adjust the path as needed
+import { AuthManagerService } from '../../services/auth/auth.manager.service';
+import { CartItem } from '../../models/cart.model';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-cart',
@@ -22,119 +21,106 @@ export class CartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cartId = `cart-${this.authManagerService.getCurrentUserId()}`; // Adjust this to get the actual cart ID
-    this.cartManagerService.getAllProducts().subscribe((products) => {
-      const productIds = products.map((product) => product.id);
-      this.cartItems = this.mapProductsToCartItems(productIds, products);
-      this.totalPrice = this.getTotalPrice();
+    const userId = this.authManagerService.getCurrentUserId();
+    this.cartId = `cart-${userId}`;
+    this.loadCart();
+  }
+
+  loadCart(): void {
+    this.cartManagerService.getAllProducts().subscribe({
+      next: (products) => {
+        const productIds = products.map((product) => product.id);
+        this.cartItems = this.mapProductsToCartItems(productIds, products);
+        this.updateTotalPrice();
+      },
+      error: (err) => {
+        console.error('Failed to load cart products:', err);
+        this.cartItems = [];
+      }
     });
   }
 
-  getTotalItems(): number {
-    return this.cartItems.reduce((sum, item) => sum + item.quantity, 0); 
-  }
-
-  getTotalPrice(): number {
+  updateTotalPrice(): void {
     this.totalPrice = this.cartItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    return this.totalPrice;
+  }
+
+  getTotalItems(): number {
+    return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
   }
 
   removeItem(productId: string): void {
-    const itemIndex = this.cartItems.findIndex((item) => item.id === productId);
-    if (itemIndex !== -1) {
-      if (this.cartItems[itemIndex].quantity > 1) {
-        this.cartItems[itemIndex].quantity -= 1;
-      } else {
-        this.cartItems.splice(itemIndex, 1);
-      }
-      const updatedProductIds = this.cartItems.map((item) => item.id);
-      this.cartManagerService
-        .update(this.cartId, { productsId: updatedProductIds })
-        .subscribe();
-    }
-  }
-
-  checkout(): void {
-    alert(`Proceeding to checkout! Total price: ${this.totalPrice}`);
-  }
-
-  clearCart(): void {
-    this.cartManagerService.clearCart(
-      this.authManagerService.getCurrentUserId()
-    );
-    this.cartItems = [];
-    this.totalPrice = 0;
-    alert('Cart cleared');
-  }
-
-  // for switching between components
-  completeCart() {
-    this.cartCompleted.emit(); // This triggers parent.onCartCompleted()
-  }
-
-
-  mapProductsToCartItems(
-    productIds: string[],
-    products: Product[]
-  ): CartItem[] {
-    const productIdCount: Record<string, number> = {};
-
-    // Count how many times each product ID appears
-    for (const id of productIds) {
-      productIdCount[id] = (productIdCount[id] || 0) + 1;
-    }
-
-    // Filter products to only include unique product IDs
-    const uniqueProducts = products.filter(
-      (product, index, self) =>
-        index === self.findIndex((p) => p.id === product.id)
-    );
-
-    // Build CartItem array based on counted product IDs
-    const cartItems: CartItem[] = [];
-
-    for (const product of uniqueProducts) {
-      const quantity = productIdCount[product.id];
-      if (quantity) {
-        cartItems.push({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          quantity,
-          imageUrl: product.images[0] || '',
-        });
-      }
-    }
-
-    return cartItems;
-  }
-
-  decrementQuantity(productId: string): void {
-    const itemIndex = this.cartItems.findIndex((item) => item.id === productId);
-    if (itemIndex !== -1) {
-      if (this.cartItems[itemIndex].quantity > 1) {
-        this.cartItems[itemIndex].quantity -= 1;
-      } else {
-        this.cartItems.splice(itemIndex, 1);
-      }
-      const updatedProductIds = this.cartItems.map((item) => item.id);
-      this.cartManagerService
-        .update(this.cartId, { productsId: updatedProductIds })
-        .subscribe();
+    const index = this.cartItems.findIndex(item => item.id === productId);
+    if (index !== -1) {
+      const item = this.cartItems[index];
+      item.quantity > 1
+        ? item.quantity--
+        : this.cartItems.splice(index, 1);
+      this.persistCart();
     }
   }
 
   incrementQuantity(productId: string): void {
-    const itemIndex = this.cartItems.findIndex((item) => item.id === productId);
-    if (itemIndex !== -1) {
-      this.cartItems[itemIndex].quantity += 1;
-      const updatedProductIds = this.cartItems.map((item) => item.id);
-      this.cartManagerService
-        .update(this.cartId, { productsId: updatedProductIds })
-        .subscribe();
+    const item = this.cartItems.find(item => item.id === productId);
+    if (item) {
+      item.quantity++;
+      this.persistCart();
     }
+  }
+
+  decrementQuantity(productId: string): void {
+    const item = this.cartItems.find(item => item.id === productId);
+    if (item) {
+      item.quantity > 1 ? item.quantity-- : this.removeItem(productId);
+      this.persistCart();
+    }
+  }
+
+  persistCart(): void {
+    const productIds = this.cartItems.flatMap(item => Array(item.quantity).fill(item.id));
+    this.cartManagerService.update(this.cartId, { productsId: productIds }).subscribe({
+      next: () => this.updateTotalPrice(),
+      error: (err) => console.error('Failed to update cart:', err)
+    });
+  }
+
+  clearCart(): void {
+    this.cartManagerService.clearCart(this.authManagerService.getCurrentUserId());
+    this.cartItems = [];
+    this.updateTotalPrice();
+    alert('Cart cleared');
+  }
+
+  checkout(): void {
+    this.persistCart(); // Ensure latest changes are saved
+    alert(`Proceeding to checkout! Total price: $${this.totalPrice.toFixed(2)}`);
+    this.cartCompleted.emit(); // Notify parent component
+  }
+
+  completeCart(): void {
+    this.cartCompleted.emit();
+  }
+
+  private mapProductsToCartItems(productIds: string[], products: Product[]): CartItem[] {
+    const countMap = productIds.reduce<Record<string, number>>((acc, id) => {
+      acc[id] = (acc[id] || 0) + 1;
+      return acc;
+    }, {});
+
+    const uniqueProducts = Array.from(
+      new Map(products.map(p => [p.id, p])).values()
+    );
+
+    return uniqueProducts
+      .filter(p => countMap[p.id])
+      .map(p => ({
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        quantity: countMap[p.id],
+        imageUrl: p.images[0] || ''
+      }));
   }
 }
