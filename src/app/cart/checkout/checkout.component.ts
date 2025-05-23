@@ -38,7 +38,7 @@ export class CheckoutComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10,15}$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       address: ['', Validators.required],
       city: ['', Validators.required],
       state: ['', Validators.required],
@@ -97,8 +97,6 @@ export class CheckoutComponent implements OnInit {
       id: Math.floor(1000 + Math.random() * 9000).toString(), // Generate a random 4-digit ID
       user_id: String(this.user_id),
       status: 'pending',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       subtotal: this.getTotalPrice(),
       taxAmount: 4.0,
       shippingAmount: 6.0,
@@ -114,8 +112,6 @@ export class CheckoutComponent implements OnInit {
       .toString(36)
       .substr(2, 9)
       .toUpperCase()}`,
-      shippedAt: Date.now().toString() + '3',
-      deliverAt: Date.now().toString(),
       name: `${this.checkoutForm.value.firstName} ${this.checkoutForm.value.lastName}`,
       phone: this.checkoutForm.value.phone,
       shippingAddress: `${this.checkoutForm.value.address}, ${this.checkoutForm.value.city}, ${this.checkoutForm.value.state}, ${this.checkoutForm.value.zipCode}`,

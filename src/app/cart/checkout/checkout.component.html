@@ -83,9 +83,14 @@
                                 <label class="text-sm text-slate-900 font-medium block mb-2">Phone No.</label>
                                 <input type="tel" formControlName="phone" placeholder="Enter Phone No."
                                     class="px-4 py-2.5 bg-white border border-gray-400 text-slate-900 w-full text-sm rounded-md focus:outline-blue-600" />
-                                <div *ngIf="checkoutForm.get('phone')?.invalid && checkoutForm.get('phone')?.touched"
-                                    class="text-red-500 text-xs mt-1">
-                                    Valid phone number is required
+                                <div *ngIf="checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid" class="text-red-500 text-xs mt-1">
+                                    <span *ngIf="checkoutForm.get('phone')?.errors?.['required']">
+                                        Phone number is required
+                                    </span>
+                                    <span *ngIf="checkoutForm.get('phone')?.errors?.['pattern']">
+                                        Phone number must contain only digits or 
+                                        Phone number must be exactly 10 digits
+                                    </span>
                                 </div>
                             </div>
 

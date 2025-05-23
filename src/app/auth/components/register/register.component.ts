@@ -33,6 +33,7 @@ export class RegisterComponent {
     
     this.authManagerService.signup(this.username, this.email, this.password, this.role ).then((success) => {
       if (success) {
+        registerForm.reset();
         this.router.navigate(['/home']);
       } else {
         console.error('Registration failed');
