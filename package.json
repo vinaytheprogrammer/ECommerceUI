@@ -23,6 +23,7 @@
     "@ngrx/router-store": "^13.2.0",
     "@ngrx/store": "^13.2.0",
     "@ngrx/store-devtools": "^13.2.0",
+    "bcrypt": "^6.0.0",
     "jwt-decode": "^4.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

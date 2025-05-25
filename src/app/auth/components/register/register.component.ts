@@ -35,8 +35,6 @@ export class RegisterComponent {
       if (success) {
         registerForm.reset();
         this.router.navigate(['/home']);
-      } else {
-        console.error('Registration failed');
       }
     }).catch((error) => {
       console.error('An error occurred during registration:', error);

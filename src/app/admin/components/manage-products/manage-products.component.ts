@@ -58,6 +58,9 @@ export class ManageProductsComponent implements OnInit {
     }
 
     this.currentProduct.images = [this.imageUrl];
+    this.currentProduct.discount = Number(this.currentProduct.discount) || 0;
+    this.currentProduct.stock = Number(this.currentProduct.stock) || 0;
+    this.currentProduct.price = Number(this.currentProduct.price) || 0;
 
     if (this.isEditing) {
       this.productService.updateProduct(String(this.currentProduct.id), this.currentProduct).subscribe(() => {

@@ -9,7 +9,8 @@ import { ManageUsersComponent } from './components/manage-users/manage-users.com
 import { FormsModule } from '@angular/forms';
 import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
 import { CategoryManagementComponent } from './components/manage-category/manage-category.component';
-import { UnsavedChangesGuard } from '../core/guards/unsaved-changes.guard'; // Adjust the path as necessary
+import { UnsavedChangesGuard } from '../core/guards/unsaved-changes.guard';
+import { ManageOrdersComponent } from './components/manage-orders/manage-orders.component'; // Adjust the path as necessary
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { UnsavedChangesGuard } from '../core/guards/unsaved-changes.guard'; // A
     ManageProductsComponent,
     ManageUsersComponent,
     AdminProfileComponent,
-    CategoryManagementComponent
+    CategoryManagementComponent,
+    ManageOrdersComponent
   ],
   imports: [
     CommonModule,

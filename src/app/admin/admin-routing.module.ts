@@ -7,6 +7,7 @@ import { AdminGuard } from '../core/guards/admin.guard';
 import { AdminProfileComponent } from './components/admin-profile/admin-profile.component';
 import { CategoryManagementComponent } from './components/manage-category/manage-category.component';
 import { UnsavedChangesGuard } from '../core/guards/unsaved-changes.guard';
+import { ManageOrdersComponent } from './components/manage-orders/manage-orders.component'; // Adjust the path as necessary
 
 const routes: Routes = [
   { 
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'users', component: ManageUsersComponent, canDeactivate: [UnsavedChangesGuard] },
       { path: 'category', component: CategoryManagementComponent, canDeactivate: [UnsavedChangesGuard] },
       { path: 'profile', component: AdminProfileComponent},
+      { path: 'orders', component: ManageOrdersComponent, canDeactivate: [UnsavedChangesGuard] },
       { path: '', redirectTo: 'products', pathMatch: 'full' }
     ]
   }

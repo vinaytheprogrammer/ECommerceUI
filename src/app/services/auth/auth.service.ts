@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 
 export class AuthService {
-  private apiEndpoint ='http://localhost:3011';
+  private apiEndpoint = `${environment.apiBaseUrl}`;
 
   constructor(private http: HttpClient) {}
 
@@ -27,14 +27,14 @@ export class AuthService {
   }
 
   getAccessToken(code: string): Observable<any> {
-    return this.http.post(`http://localhost:3000/auth/token`, {
+    return this.http.post(`${environment.OAuth_URL}/auth/token`, {
       code,
       clientId:  environment.CLIENT_ID,
     });
   }
 
   refreshToken(refreshToken: string): Observable<any> {
-    return this.http.post(`http://localhost:3000/auth/token-refresh`, { refreshToken });
+    return this.http.post(`${environment.OAuth_URL}/auth/token-refresh`, { refreshToken });
   }
 
   logout(refreshToken: string): Observable<any> {

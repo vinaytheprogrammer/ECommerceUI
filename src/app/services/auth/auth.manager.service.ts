@@ -2,8 +2,15 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AuthService } from './auth.service';
-import { setToken, setUser, clearState } from '../../core/store/auth/auth.actions';
-import { selectUser, selectIsAdmin } from '../../core/store/auth/auth.selectors';
+import {
+  setToken,
+  setUser,
+  clearState,
+} from '../../core/store/auth/auth.actions';
+import {
+  selectUser,
+  selectIsAdmin,
+} from '../../core/store/auth/auth.selectors';
 import { firstValueFrom, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -41,23 +48,28 @@ export class AuthManagerService {
   }
 
   loginViaGoogle() {
-    const googleAuthUrl = 'http://localhost:3000/auth/google'; // optionally from env
+    // const googleAuthUrl = 'http://localhost:3000/auth/google'; // optionally from env
+    const googleAuthUrl = environment.OAuth_URL + '/auth/google';
     this.oAuthLogin(googleAuthUrl);
 
     const code = window.sessionStorage.getItem('authCode');
     if (code) {
-      this.getAccessToken(code).then(() => {
-        window.sessionStorage.removeItem('authCode');
-        this.router.navigate(['/home']);
-      }).catch((error) => {
-        console.error('Error getting access token:', error);
-      });
+      this.getAccessToken(code)
+        .then(() => {
+          window.sessionStorage.removeItem('authCode');
+          this.router.navigate(['/home']);
+        })
+        .catch((error) => {
+          console.error('Error getting access token:', error);
+        });
     }
   }
 
   async login(name: string, password: string): Promise<boolean> {
     try {
-      const response = await firstValueFrom(this.authService.login(name, password));
+      const response = await firstValueFrom(
+        this.authService.login(name, password)
+      );
       if (response?.accessToken && response?.refreshToken) {
         localStorage.setItem('accessToken', response.accessToken);
         localStorage.setItem('refreshToken', response.refreshToken);
@@ -74,9 +86,16 @@ export class AuthManagerService {
     return this.isAuthenticated;
   }
 
-  async signup(name: string, email: string, password: string, role: string): Promise<boolean> {
+  async signup(
+    name: string,
+    email: string,
+    password: string,
+    role: string
+  ): Promise<boolean> {
     try {
-      const response = await firstValueFrom(this.authService.signup(name, email, password, role));
+      const response = await firstValueFrom(
+        this.authService.signup(name, email, password, role)
+      );
       if (response?.accessToken && response?.refreshToken) {
         localStorage.setItem('accessToken', response.accessToken);
         localStorage.setItem('refreshToken', response.refreshToken);
@@ -87,7 +106,9 @@ export class AuthManagerService {
         this.isAuthenticated = false;
       }
     } catch (error) {
-      console.error('Error during signup:', error);
+      console.log('Error during signup:', error);
+      alert((error as any).error.error.message);
+
       this.isAuthenticated = false;
     }
     return this.isAuthenticated;
@@ -95,7 +116,9 @@ export class AuthManagerService {
 
   async getAccessToken(code: string): Promise<void> {
     try {
-      const response = await firstValueFrom(this.authService.getAccessToken(code));
+      const response = await firstValueFrom(
+        this.authService.getAccessToken(code)
+      );
       if (response?.accessToken) {
         this.isAuthenticated = true;
         console.log('Access token:', response.accessToken);
@@ -108,7 +131,9 @@ export class AuthManagerService {
 
   async refreshAccessToken(refreshToken: string): Promise<string | null> {
     try {
-      const response = await firstValueFrom(this.authService.refreshAccessToken(refreshToken));
+      const response = await firstValueFrom(
+        this.authService.refreshAccessToken(refreshToken)
+      );
       if (response?.accessToken) {
         localStorage.setItem('accessToken', response.accessToken);
         this.putInsideStorage(response.accessToken);
@@ -129,14 +154,16 @@ export class AuthManagerService {
       localStorage.removeItem('authState');
       window.sessionStorage.removeItem('authCode');
       localStorage.removeItem('accessToken');
-      
+
       this.store.dispatch(clearState());
       this.isAuthenticated = false;
       this.store.dispatch(setUser({ user: null }));
-      
+
       const refreshToken = localStorage.getItem('refreshToken');
-      const response = await firstValueFrom(this.authService.logout(refreshToken ?? ''));
-      
+      const response = await firstValueFrom(
+        this.authService.logout(refreshToken ?? '')
+      );
+
       if (response?.message === 'Logout successful') {
         localStorage.removeItem('refreshToken'); //Http Bearer Token
         window.sessionStorage.removeItem('refreshToken'); //OAuth Token
@@ -184,19 +211,25 @@ export class AuthManagerService {
 
   isAdmin(): boolean {
     let isAdmin = false;
-    this.store.select(selectIsAdmin).pipe(take(1)).subscribe((val) => {
-      isAdmin = !!val;
-    });
+    this.store
+      .select(selectIsAdmin)
+      .pipe(take(1))
+      .subscribe((val) => {
+        isAdmin = !!val;
+      });
     return isAdmin;
   }
 
   getCurrentUserId(): string {
     let userId = '';
-    this.store.select(selectUser).pipe(take(1)).subscribe((user) => {
-      if (user && user.id) {
-        userId = user.id;
-      }
-    });
+    this.store
+      .select(selectUser)
+      .pipe(take(1))
+      .subscribe((user) => {
+        if (user && user.id) {
+          userId = user.id;
+        }
+      });
     return userId;
   }
 

@@ -1,13 +1,9 @@
-<div
-  class="max-w-5xl mx-auto px-4 sm:px-6 py-8 bg-white rounded-lg shadow-md mt-8 mb-12"
->
+<div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 bg-white rounded-lg shadow-md mt-8 mb-12">
   <!-- Stepper -->
   <div class="flex items-start mb-12">
     <div class="w-full">
       <div class="flex items-center w-full">
-        <div
-          class="w-8 h-8 shrink-0 mx-[-1px] bg-blue-600 p-1.5 flex items-center justify-center rounded-full"
-        >
+        <div class="w-8 h-8 shrink-0 mx-[-1px] bg-blue-600 p-1.5 flex items-center justify-center rounded-full">
           <span class="text-sm text-white font-semibold">1</span>
         </div>
         <div class="w-full h-[3px] mx-4 rounded-lg bg-slate-300"></div>
@@ -18,9 +14,7 @@
     </div>
     <div class="w-full">
       <div class="flex items-center w-full">
-        <div
-          class="w-8 h-8 shrink-0 mx-[-1px] bg-slate-300 p-1.5 flex items-center justify-center rounded-full"
-        >
+        <div class="w-8 h-8 shrink-0 mx-[-1px] bg-slate-300 p-1.5 flex items-center justify-center rounded-full">
           <span class="text-sm text-white font-semibold">2</span>
         </div>
         <div class="w-full h-[3px] mx-4 rounded-lg bg-slate-300"></div>
@@ -31,9 +25,7 @@
     </div>
     <div>
       <div class="flex items-center">
-        <div
-          class="w-8 h-8 shrink-0 mx-[-1px] bg-slate-300 p-1.5 flex items-center justify-center rounded-full"
-        >
+        <div class="w-8 h-8 shrink-0 mx-[-1px] bg-slate-300 p-1.5 flex items-center justify-center rounded-full">
           <span class="text-sm text-white font-semibold">3</span>
         </div>
       </div>
@@ -51,31 +43,22 @@
   <div *ngIf="totalPrice === 0" class="text-center text-lg text-slate-500 mb-8">
     Your cart is empty.
   </div>
-  
+
   <!-- Cart Items -->
   <div class="space-y-6">
-    <div
-      *ngFor="let item of cartItems"
-      class="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition"
-    >
+    <div *ngFor="let item of cartItems"
+      class="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition">
       <div class="flex items-center gap-4">
-        <img
-          [src]="item.imageUrl"
-          alt="{{ item.name }}"
-          class="w-20 h-20 object-cover rounded-lg border border-gray-200"
-        />
+        <img [src]="item.imageUrl" alt="{{ item.name }}"
+          class="w-20 h-20 object-cover rounded-lg border border-gray-200" loading="lazy"
+          (error)="item.imageUrl = 'assets/images/placeholder.jpg'" [alt]="'Image of ' + item.name" />
         <div>
           <h3 class="text-lg font-semibold text-slate-800">{{ item.name }}</h3>
           <p class="text-sm text-slate-600">Price: ₹{{ item.price }}</p>
           <p class="text-sm text-slate-600 mt-1">
             Quantity:
-            <input
-              type="number"
-              [(ngModel)]="item.quantity"
-              min="1"
-              class="w-16 p-1 text-center border border-gray-300 rounded-md bg-white text-sm"
-              disabled
-            />
+            <input type="number" [(ngModel)]="item.quantity" min="1"
+              class="w-16 p-1 text-center border border-gray-300 rounded-md bg-white text-sm" disabled />
           </p>
         </div>
       </div>
@@ -83,35 +66,28 @@
       <div class="flex items-center gap-2">
         <button
           class="flex items-center justify-center w-8 h-8 bg-gray-200 text-gray-700 rounded-full hover:bg-blue-500 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
-          (click)="decrementQuantity(item.id)"
-          [disabled]="item.quantity <= 1"
-          aria-label="Decrease quantity"
-          type="button"
-        >
+          (click)="decrementQuantity(item.id)" [disabled]="item.quantity <= 1" aria-label="Decrease quantity"
+          type="button">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <line x1="5" y1="12" x2="19" y2="12"/>
+            <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
         </button>
-        <span class="min-w-[2.5rem] text-center text-base font-medium text-slate-800 bg-white border border-gray-300 rounded px-3 py-1">
+        <span
+          class="min-w-[2.5rem] text-center text-base font-medium text-slate-800 bg-white border border-gray-300 rounded px-3 py-1">
           {{ item.quantity }}
         </span>
         <button
           class="flex items-center justify-center w-8 h-8 bg-gray-200 text-gray-700 rounded-full hover:bg-blue-500 hover:text-white transition"
-          (click)="incrementQuantity(item.id)"
-          aria-label="Increase quantity"
-          type="button"
-        >
+          (click)="incrementQuantity(item.id)" aria-label="Increase quantity" type="button">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <line x1="5" y1="12" x2="19" y2="12"/>
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
         </button>
       </div>
 
-      <button
-        (click)="removeItem(item.id)"
-        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm transition"
-      >
+      <button (click)="removeItem(item.id)"
+        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm transition">
         Remove
       </button>
     </div>
@@ -129,19 +105,13 @@
       </p>
     </div>
     <div class="mt-6 flex flex-col sm:flex-row gap-4">
-      <button
-        (click)="totalPrice > 0 && checkout()"
-        (click)="totalPrice > 0 && completeCart()"
-        [class.cursor-not-allowed]="totalPrice === 0"
-        [disabled]="totalPrice === 0"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-6 rounded-md text-sm font-medium transition"
-      >
+      <button (click)="totalPrice > 0 && checkout()" (click)="totalPrice > 0 && completeCart()"
+        [class.cursor-not-allowed]="totalPrice === 0" [disabled]="totalPrice === 0"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-6 rounded-md text-sm font-medium transition">
         Checkout
       </button>
-      <button
-        (click)="clearCart()"
-        class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-slate-800 py-2.5 px-6 rounded-md text-sm font-medium transition"
-      >
+      <button (click)="clearCart()"
+        class="w-full bg-gray-100 hover:bg-gray-200 border border-gray-300 text-slate-800 py-2.5 px-6 rounded-md text-sm font-medium transition">
         Clear Cart
       </button>
     </div>

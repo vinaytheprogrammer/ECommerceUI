@@ -32,7 +32,6 @@ export class UserProfileComponent implements OnInit {
           role: user.role,
           id: userId.toString()
         };
-        console.log('currentUser:', this.currentUser);
       },
       (error) => {
         console.error('Error fetching user:', error);
@@ -60,9 +59,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   cancelEdit() {
-    // Cancel edit logic here
-    console.log('Edit cancelled');
-      
     this.isEditing = false;
   }
 

@@ -17,6 +17,12 @@ export class ManageUsersComponent {
     email: '',
     role: '',
   };
+  newUser: User = {
+    name: '',
+    email: '',
+    role: '',
+  };
+  showSuccessPopup = false;
 
   constructor(
     private userService: UserService,
@@ -41,9 +47,14 @@ export class ManageUsersComponent {
     this.userService.createUser(this.currentUser).subscribe({
       next: (response) => {
         this.users.push(response);
+        this.newUser = response;
+        this.showSuccessPopup = true;
         this.resetForm();
       },
-      error: (err) => console.error('Error creating user:', err),
+      error: (err) => {
+        console.error('Error creating user:', err);
+        alert(err.error.error.message);
+      },
     });
   }
 
@@ -75,7 +86,7 @@ export class ManageUsersComponent {
     // user can not delete himself
     const currentUserId = this.authManagerService.getCurrentUserId();
     if (Number(currentUserId) === id) {
-      alert("You cannot delete your own account.");
+      alert('You cannot delete your own account.');
       return;
     }
     if (confirm('Are you sure you want to delete this user?')) {
@@ -105,12 +116,12 @@ export class ManageUsersComponent {
   canExit(): boolean {
     // Check if the form is dirty (has unsaved changes)
     const isDirty =
-      this.currentUser.name ||
-      this.currentUser.email ||
-      this.currentUser.role;
+      this.currentUser.name || this.currentUser.email || this.currentUser.role;
     return (
       !isDirty ||
-      confirm('Are you sure you want to leave this page? Any unsaved changes will be lost.')
+      confirm(
+        'Are you sure you want to leave this page? Any unsaved changes will be lost.'
+      )
     );
   }
 }

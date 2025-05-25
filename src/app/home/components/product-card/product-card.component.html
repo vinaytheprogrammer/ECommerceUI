@@ -3,7 +3,9 @@
 >
   <img
     [src]="product.images[0]"
-    class="card-img-top w-full h-[400px] object-cover border-b border-gray-200 transition-transform duration-300 ease-in-out hover:scale-105"
+    class="card-img-top w-12/12 h-[360px] sm:h-[400px] md:h-[600px] object-cover border-b border-gray-200 transition-transform duration-300 ease-in-out hover:scale-105 rounded-t-lg"
+    loading="lazy"
+    (error)="product.images[0] = 'assets/images/placeholder.jpg'"
     [alt]="'Image of ' + product.name"
   />
   <div class="card-body flex-1 p-6 flex flex-col justify-between">

@@ -1,5 +1,5 @@
-<div class="mb-8">
-  <h2 class="text-2xl font-bold text-gray-800 mb-6">Manage Categories</h2>
+<div class="mb-8 max-w-4xl mt-8 mx-auto font-sans text-gray-800">
+   <h1 class="text-center mb-8 text-gray-900 text-3xl font-bold">Manage Categories</h1>
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
     <input type="text"
       class="w-full sm:w-1/2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -7,7 +7,7 @@
     <div class="flex justify-end mb-6">
       <button class="add-user-btn bg-blue-400 hover:bg-blue-200 text-white px-5 py-2 rounded transition text-base"
         (click)="openAddCategoryModal()">
-        Add New Product
+        Add New Category
       </button>
     </div>
   </div>
@@ -17,11 +17,11 @@
   <table class="min-w-full bg-white">
     <thead>
       <tr class="bg-blue-50 text-blue-900">
-        <th class="py-3 px-4 text-left font-semibold">ID</th>
-        <th class="py-3 px-4 text-left font-semibold">Name</th>
-        <th class="py-3 px-4 text-left font-semibold">Description</th>
-        <th class="py-3 px-4 text-left font-semibold">Image</th>
-        <th class="py-3 px-4 text-left font-semibold">Actions</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">ID</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Name</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Description</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Image</th>
+        <th class="px-6 py-4 bg-gray-800 text-white font-medium border-b">Actions</th>
       </tr>
     </thead>
     <tbody>

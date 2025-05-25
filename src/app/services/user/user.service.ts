@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.model'; // Adjust the import path as necessary
+import {environment} from '../../../environments/environment'; // Import environment for API URL
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3011/users'; // Base URL for the API
+  private apiUrl = `${environment.apiBaseUrl}/users`; // Use environment variable for API URL
 
   constructor(private http: HttpClient) { }
 
