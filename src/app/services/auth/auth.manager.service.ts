@@ -48,39 +48,8 @@ export class AuthManagerService {
   }
 
   SignupViaGoogle() {
-    // const googleAuthUrl = 'http://localhost:3000/auth/google'; // optionally from env
     const googleAuthUrl = environment.OAuth_URL + '/auth/google';
     this.oAuthSignup(googleAuthUrl);
-
-    const code = window.sessionStorage.getItem('authCode');
-    if (code) {
-      this.getAccessToken(code)
-        .then(() => {
-          window.sessionStorage.removeItem('authCode');
-
-          const authState = localStorage.getItem('authState');
-          if (authState) {
-            const parsedState = JSON.parse(authState);
-            console.log('Parsed authState:', parsedState.user);
-
-            //in user model now google user id is thrown and model own is now set
-            if (parsedState?.user) {
-              this.signup(
-                parsedState.user.username,
-                parsedState.user.email,
-                '123',  
-                parsedState.user.role || 'user',
-                parsedState.user.id // Use googleId if available for login with google
-              )
-            }
-          }
-          
-          this.router.navigate(['/home']);
-        })
-        .catch((error) => {
-          console.error('Error getting access token:', error);
-        });
-    }
   }
 
   async login(name: string, password: string): Promise<boolean> {
