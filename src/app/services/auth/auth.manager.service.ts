@@ -245,8 +245,12 @@ export class AuthManagerService {
       .select(selectUser)
       .pipe(take(1))
       .subscribe((user) => {
-        if (user && user.id) {
+        if (user && user.google_user_id != '') {
+          userId = user.google_user_id || 'lost_google_id'; // Use google_user_id if available
+          console.log('google user id', userId);
+        } else if (user && user.id) {
           userId = user.id;
+          console.log('http bearer user id', userId);
         }
       });
     return userId;

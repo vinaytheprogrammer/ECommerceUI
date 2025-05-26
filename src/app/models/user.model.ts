@@ -4,6 +4,7 @@ export interface AuthUser {
     email: string;
     role: string;
     id: string;
+    google_user_id ?: string; // Optional field for Google users
   }
   
 export interface User {
