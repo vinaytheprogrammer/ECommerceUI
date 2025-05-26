@@ -29,7 +29,7 @@ export class LoginComponent {
     }
   }
 
-  loginViaGoogle() {
-    this.authManagerService.loginViaGoogle();
-  }
+  // loginViaGoogle() {
+  //   this.authManagerService.loginViaGoogle();
+  // }
 }

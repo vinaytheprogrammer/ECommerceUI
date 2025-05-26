@@ -26,7 +26,7 @@ export class AuthManagerService {
     private authService: AuthService
   ) {}
 
-  oAuthLogin(url: string) {
+  oAuthSignup(url: string) {
     const myform = document.createElement('form');
     const body = {
       client_id: environment.CLIENT_ID,
@@ -47,16 +47,34 @@ export class AuthManagerService {
     myform.submit();
   }
 
-  loginViaGoogle() {
+  SignupViaGoogle() {
     // const googleAuthUrl = 'http://localhost:3000/auth/google'; // optionally from env
     const googleAuthUrl = environment.OAuth_URL + '/auth/google';
-    this.oAuthLogin(googleAuthUrl);
+    this.oAuthSignup(googleAuthUrl);
 
     const code = window.sessionStorage.getItem('authCode');
     if (code) {
       this.getAccessToken(code)
         .then(() => {
           window.sessionStorage.removeItem('authCode');
+
+          const authState = localStorage.getItem('authState');
+          if (authState) {
+            const parsedState = JSON.parse(authState);
+            console.log('Parsed authState:', parsedState.user);
+
+            //in user model now google user id is thrown and model own is now set
+            if (parsedState?.user) {
+              this.signup(
+                parsedState.user.username,
+                parsedState.user.email,
+                '123',  
+                parsedState.user.role || 'user',
+                parsedState.user.id // Use googleId if available for login with google
+              )
+            }
+          }
+          
           this.router.navigate(['/home']);
         })
         .catch((error) => {
@@ -90,11 +108,12 @@ export class AuthManagerService {
     name: string,
     email: string,
     password: string,
-    role: string
+    role: string,
+    google_user_id: string
   ): Promise<boolean> {
     try {
       const response = await firstValueFrom(
-        this.authService.signup(name, email, password, role)
+        this.authService.signup(name, email, password, role, google_user_id)
       );
       if (response?.accessToken && response?.refreshToken) {
         localStorage.setItem('accessToken', response.accessToken);

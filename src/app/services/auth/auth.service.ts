@@ -16,13 +16,14 @@ export class AuthService {
     return this.http.post(`${this.apiEndpoint}/login`, { name, password });
   }
 
-  signup(name: string, email: string, password: string, role: string): Observable<any> {
+  signup(name: string, email: string, password: string, role: string, google_user_id : string): Observable<any> {
     return this.http.post(`${this.apiEndpoint}/signup`, {
       name,
       email,
       role,
       password,
       permissions: ['2'], // permission for notification service
+      google_user_id 
     });
   }
 

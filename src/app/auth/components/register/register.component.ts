@@ -31,7 +31,7 @@ export class RegisterComponent {
       return;
     }
     
-    this.authManagerService.signup(this.username, this.email, this.password, this.role ).then((success) => {
+    this.authManagerService.signup(this.username, this.email, this.password, this.role, '' ).then((success) => {
       if (success) {
         registerForm.reset();
         this.router.navigate(['/home']);
@@ -45,5 +45,9 @@ export class RegisterComponent {
     // Check if the form is dirty (has unsaved changes)
     const isDirty = this.username || this.email || this.password || this.role || this.secretKey;
     return !isDirty || confirm('Are you sure you want to leave this page? Any unsaved changes will be lost.');
+  }
+
+  SignupViaGoogle() {
+    this.authManagerService.SignupViaGoogle();
   }
 }

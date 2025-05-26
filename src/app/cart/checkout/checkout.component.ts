@@ -162,60 +162,36 @@ export class CheckoutComponent implements OnInit {
   sendNotification() {
     // Prepare a detailed HTML email body with order details
     const orderDetails = `
-    <h2>Order Confirmation</h2>
-    <p>Thank you for your purchase, <strong>${
-      this.checkoutForm.value.firstName
-    } ${this.checkoutForm.value.lastName}</strong>!</p>
-    <p>Your order has been successfully placed. Here are your order details:</p>
-    <ul>
-      <li><strong>Order ID:</strong> ${this.orderData?.id || 'N/A'}</li>
-      <li><strong>Status:</strong> ${this.orderData?.status || 'pending'}</li>
-      <li><strong>Order Date:</strong> ${
-        this.orderData?.createdAt
-          ? new Date(this.orderData.createdAt).toLocaleString()
-          : new Date().toLocaleString()
-      }</li>
-      <li><strong>Shipping Address:</strong> ${
-        this.orderData?.shippingAddress || ''
-      }</li>
-      <li><strong>Phone:</strong> ${this.orderData?.phone || ''}</li>
-      <li><strong>Email:</strong> ${
-        this.orderData?.user_email || this.checkoutForm.value.email
-      }</li>
-      <li><strong>Subtotal:</strong> $${
-        this.orderData?.subtotal?.toFixed(2) || this.getTotalPrice().toFixed(2)
-      }</li>
-      <li><strong>Tax:</strong> $${
-        this.orderData?.taxAmount?.toFixed(2) || '4.00'
-      }</li>
-      <li><strong>Shipping:</strong> $${
-        this.orderData?.shippingAmount?.toFixed(2) || '6.00'
-      }</li>
-      <li><strong>Discount:</strong> $${
-        this.orderData?.discountAmount?.toFixed(2) || '0.00'
-      }</li>
-      <li><strong>Grand Total:</strong> $${
-        this.orderData?.grandTotal?.toFixed(2) || this.grandTotal.toFixed(2)
-      }</li>
-      <li><strong>Tracking Number:</strong> ${
-        this.orderData?.trackingNumber || ''
-      }</li>
-    </ul>
-    <h3>Items:</h3>
-    <ul>
-      ${this.cartItems
-        .map(
-          (item) => `
-        <li>
-          <strong>${item.name}</strong> - $${item.price} x ${item.quantity}
-        </li>
-      `
-        )
-        .join('')}
-    </ul>
-    <p>If you have any questions, please contact our support team.</p>
-    <p>Thank you for shopping with us!</p>
-  `;
+    Order Confirmation
+
+    Thank you for your purchase, ${this.checkoutForm.value.firstName} ${this.checkoutForm.value.lastName}!
+
+    Your order has been successfully placed. Here are your order details:
+
+    Order ID: ${this.orderData?.id || 'N/A'}
+    Status: ${this.orderData?.status || 'pending'}
+    Order Date: ${this.orderData?.createdAt ? new Date(this.orderData.createdAt).toLocaleString() : new Date().toLocaleString()}
+    Shipping Address: ${this.orderData?.shippingAddress || ''}
+    Phone: ${this.orderData?.phone || ''}
+    Email: ${this.orderData?.user_email || this.checkoutForm.value.email}
+    Subtotal: ₹${this.orderData?.subtotal?.toFixed(2) || this.getTotalPrice().toFixed(2)}
+    Tax: ₹${this.orderData?.taxAmount?.toFixed(2) || '4.00'}
+    Shipping: ₹${this.orderData?.shippingAmount?.toFixed(2) || '6.00'}
+    Discount: ₹${this.orderData?.discountAmount?.toFixed(2) || '0.00'}
+    Grand Total: ₹${this.orderData?.grandTotal?.toFixed(2) || this.grandTotal.toFixed(2)}
+    Tracking Number: ${this.orderData?.trackingNumber || ''}
+
+    Items:
+    ${this.cartItems
+      .map(
+      (item) => `${item.name} - $${item.price} x ${item.quantity}`
+      )
+      .join('\n')}
+
+    If you have any questions, please contact our support team.
+
+    Thank you for shopping with us!
+    `;
 
     const payload = {
       subject: 'Order Notification',

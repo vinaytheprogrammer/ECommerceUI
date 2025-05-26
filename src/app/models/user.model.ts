@@ -13,4 +13,5 @@ export interface User {
   password?: string;
   role: string;
   permissions?: string[];
+  google_user_id?: string; // Optional field for Google users
 }

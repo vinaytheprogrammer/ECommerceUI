@@ -1,12 +1,12 @@
-<nav class="bg-gray-900 shadow-md p-3 flex items-center justify-between flex-wrap">
+<nav class="bg-gray-900 shadow-md p-3 flex items-center justify-between flex-wrap max-h-screen lg:min-h-0 overflow-y-auto">
   <div class="flex items-center justify-between w-full lg:w-auto">
     <!-- Left section: Logo -->
     <a class="text-white text-xl font-bold" routerLink="/home">E-Commerce</a>
   </div>
 
-  <div class="w-full lg:flex lg:items-center lg:justify-between lg:w-auto" style="height: 50px;">
+  <div class="w-full lg:flex lg:items-center lg:justify-between lg:w-auto">
     <!-- Right section: Auth + Cart -->
-    <ul class="flex flex-col lg:flex-row items-center lg:space-x-4 w-full lg:w-auto">
+    <ul class="flex flex-col lg:flex-row items-center lg:space-x-4 w-full lg:w-auto space-y-2 lg:space-y-0">
       <li class="my-2 lg:my-0" *ngIf="authManagerService.isLoggedIn()">
         <a class="text-white px-4 py-2 hover:bg-gray-700 text-lg hover:text-yellow-400 rounded transition" routerLink="/cart"
           routerLinkActive="font-bold border-b-2 border-yellow-400">Cart</a>
