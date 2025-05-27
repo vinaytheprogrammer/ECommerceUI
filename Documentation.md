@@ -28,7 +28,12 @@
    npm install jwt-decode @types/jwt-decode
    ```
 
-4. **Run the Application**  
+4. **Install NgRx Packages**  
+  First, install the required NgRx packages:
+  ```bash
+  npm install @ngrx/store @ngrx/effects @ngrx/entity @ngrx/store-devtools
+  ```
+5.  **Run the Application**  
    ```bash
    ng serve
    ```
