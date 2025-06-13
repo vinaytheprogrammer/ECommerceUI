@@ -214,7 +214,7 @@ export class AuthManagerService {
       .select(selectUser)
       .pipe(take(1))
       .subscribe((user) => {
-        if (user && user.google_user_id != '') {
+        if (user && (user.google_user_id != null)) {
           userId = user.google_user_id || 'lost_google_id'; // Use google_user_id if available
           console.log('google user id', userId);
         } else if (user && user.id) {

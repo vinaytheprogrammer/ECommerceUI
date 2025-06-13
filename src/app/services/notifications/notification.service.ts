@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class NotificationService {
-    private baseUrl = 'http://localhost:42581/notifications';
+    private baseUrl = 'http://localhost:3018/notifications';
 
     constructor(private http: HttpClient) {}
 

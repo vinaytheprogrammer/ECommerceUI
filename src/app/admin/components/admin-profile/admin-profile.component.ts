@@ -24,6 +24,7 @@ export class AdminProfileComponent implements OnInit {
 
   ngOnInit(): void {
     const userId = this.authManagerService.getCurrentUserId();
+    // need to check  weather userId is coming from google_user_id or from the  user_id of user table
     this.userService.getUserById(Number(userId)).subscribe(
       (user: User) => {
         this.currentUser = {
