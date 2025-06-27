@@ -52,6 +52,11 @@ export class AuthManagerService {
     this.oAuthSignup(googleAuthUrl);
   }
 
+  loginViaGoogle() {
+    const googleAuthUrl = environment.OAuth_URL + '/auth/google';
+    this.oAuthSignup(googleAuthUrl);
+  }
+  
   async login(name: string, password: string): Promise<boolean> {
     try {
       const response = await firstValueFrom(
