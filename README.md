@@ -167,3 +167,4 @@ Global styles and theme definitions.
 - **Reusability:** Shared and core modules promote code reuse and reduce duplication.
 - **Performance:** Lazy loading of modules improves initial load time and user experience.
 
+---
