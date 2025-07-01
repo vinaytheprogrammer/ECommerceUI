@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { first, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -13,17 +13,16 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(name: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiEndpoint}/login`, { name, password });
+    return this.http.post(`${this.apiEndpoint}/login`, { username: name, password });
   }
 
   signup(name: string, email: string, password: string, role: string, google_user_id : string): Observable<any> {
     return this.http.post(`${this.apiEndpoint}/signup`, {
-      name,
+      username: name,
       email,
       role,
       password,
-      permissions: ['2'], // permission for notification service
-      google_user_id 
+      firstName: name,
     });
   }
 
@@ -43,6 +42,6 @@ export class AuthService {
   }
 
   refreshAccessToken(refreshToken: string): Observable<any> {
-    return this.http.post(`${this.apiEndpoint}/refresh-token`, { refreshToken });
+    return this.http.post(`${this.apiEndpoint}/refresh-token`, { refreshTokenId: refreshToken });
   }
 }
